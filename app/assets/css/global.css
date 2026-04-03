@@ -1,0 +1,84 @@
+/* Markins — Global Styles */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: 'Commissioner', system-ui, sans-serif;
+  background-color: #09090B;
+  color: #ECEBE4;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Lenis smooth scroll */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Unbounded', system-ui, sans-serif;
+  font-weight: 600;
+  line-height: 1.15;
+  color: #ECEBE4;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+img, video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+::selection {
+  background-color: #D5CDBA;
+  color: #09090B;
+}
+
+:focus-visible {
+  outline: 2px solid #D5CDBA;
+  outline-offset: 2px;
+}
+
+input, textarea {
+  outline: none !important;
+  font-family: inherit;
+}
+input:focus, input:focus-visible,
+textarea:focus, textarea:focus-visible {
+  outline: none !important;
+}
