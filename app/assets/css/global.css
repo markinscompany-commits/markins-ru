@@ -1,4 +1,5 @@
 /* Markins — Global Styles */
+/* Warm beige theme, large typography, visual-first */
 
 *,
 *::before,
@@ -15,11 +16,13 @@ html {
 }
 
 body {
-  font-family: 'Commissioner', system-ui, sans-serif;
-  background-color: #09090B;
-  color: #ECEBE4;
+  font-family: 'Inter', system-ui, sans-serif;
+  background-color: #F5F0EB;
+  color: #1A1A1A;
   line-height: 1.6;
   overflow-x: hidden;
+  font-weight: 400;
+  font-size: 16px;
 }
 
 /* Lenis smooth scroll */
@@ -42,10 +45,10 @@ html.lenis body {
 
 /* Typography */
 h1, h2, h3, h4, h5, h6 {
-  font-family: 'Unbounded', system-ui, sans-serif;
+  font-family: 'Space Grotesk', system-ui, sans-serif;
   font-weight: 600;
   line-height: 1.15;
-  color: #ECEBE4;
+  color: #101010;
 }
 
 a {
@@ -62,15 +65,17 @@ img, video {
 button {
   font-family: inherit;
   cursor: pointer;
+  border: none;
+  background: none;
 }
 
 ::selection {
-  background-color: #D5CDBA;
-  color: #09090B;
+  background-color: #101010;
+  color: #F5F0EB;
 }
 
 :focus-visible {
-  outline: 2px solid #D5CDBA;
+  outline: 2px solid #101010;
   outline-offset: 2px;
 }
 

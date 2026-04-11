@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Техническое задание — Разработка сайта markins.ru</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Commissioner:wght@300;400;500;600;700&family=Unbounded:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-0: #FFFFFF;
+            --bg-1: #F7F7F8;
+            --bg-2: #F0F0F2;
+            --bg-3: #E8E8EC;
+            --accent: #1A1A1A;
+            --accent-hover: #333333;
+            --fg-100: rgba(0,0,0, 0.92);
+            --fg-70: rgba(0,0,0, 0.6);
+            --fg-45: rgba(0,0,0, 0.42);
+            --fg-25: rgba(0,0,0, 0.18);
+            --fg-10: rgba(0,0,0, 0.08);
+        }
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body { font-family:'Commissioner',sans-serif; color:var(--fg-100); background:#E8E8EC; }
+        .page { width:210mm; min-height:297mm; margin:0 auto; padding:48px 56px; position:relative; background:var(--bg-0); }
+        .page + .page { page-break-before:always; }
+        @media print {
+            body { background:var(--bg-0); -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+            .page { margin:0; page-break-after:always; width:100%; }
+            .page:last-child { page-break-after:avoid; }
+        }
+        @page { size:A4; margin:0; }
+
+        /* Title page */
+        .title-page { display:flex; flex-direction:column; justify-content:space-between; min-height:calc(297mm - 96px); }
+        .title-page__header { display:flex; justify-content:space-between; align-items:flex-start; }
+        .logo svg { height:28px; width:auto; }
+        .title-page__date { font-size:13px; color:var(--fg-45); }
+        .title-page__center { flex:1; display:flex; flex-direction:column; justify-content:center; gap:32px; padding:80px 0; }
+        .title-page__label { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:3px; color:var(--accent); }
+        .title-page__title { font-family:'Unbounded',sans-serif; font-size:30px; font-weight:500; line-height:1.3; }
+        .title-page__subtitle { font-size:16px; color:var(--fg-70); line-height:1.7; max-width:520px; }
+        .title-page__footer { display:flex; justify-content:space-between; align-items:flex-end; padding-top:32px; border-top:1px solid var(--fg-10); }
+        .title-page__client-label, .title-page__from-label { font-size:11px; text-transform:uppercase; letter-spacing:2px; color:var(--fg-45); font-weight:500; display:block; margin-bottom:6px; }
+        .title-page__client-name { font-family:'Unbounded',sans-serif; font-size:16px; font-weight:500; }
+        .title-page__from-name { font-size:14px; color:var(--fg-70); }
+
+        /* Section */
+        .section-number { font-family:'Unbounded',sans-serif; font-size:11px; font-weight:600; color:var(--accent); letter-spacing:2px; margin-bottom:12px; }
+        .section-title { font-family:'Unbounded',sans-serif; font-size:22px; font-weight:500; margin-bottom:24px; line-height:1.4; }
+        .section-intro { font-size:14px; color:var(--fg-70); line-height:1.8; margin-bottom:32px; max-width:580px; }
+
+        /* Problem card */
+        .problem-card { background:var(--bg-2); border:1px solid var(--fg-10); border-radius:12px; padding:22px 26px; display:flex; gap:20px; align-items:flex-start; margin-bottom:12px; }
+        .problem-card__icon { width:40px; height:40px; min-width:40px; border-radius:10px; background:rgba(26,26,26,0.05); border:1px solid rgba(26,26,26,0.1); display:flex; align-items:center; justify-content:center; font-family:'Unbounded',sans-serif; font-size:15px; font-weight:600; color:var(--accent); }
+        .problem-card__title { font-family:'Unbounded',sans-serif; font-size:13px; font-weight:500; margin-bottom:6px; }
+        .problem-card__text { font-size:12px; color:var(--fg-70); line-height:1.7; }
+
+        /* Sitemap */
+        .sitemap-grid { display:flex; flex-direction:column; gap:14px; }
+        .sitemap-card { background:var(--bg-2); border:1px solid var(--fg-10); border-radius:10px; padding:18px 22px; }
+        .sitemap-card__header { display:flex; align-items:center; gap:12px; margin-bottom:10px; }
+        .sitemap-card__icon { font-size:16px; }
+        .sitemap-card__title { font-family:'Unbounded',sans-serif; font-size:12px; font-weight:500; color:var(--accent); }
+        .sitemap-card__blocks { list-style:none; display:flex; flex-wrap:wrap; gap:6px; }
+        .sitemap-card__blocks li { font-size:11px; color:var(--fg-70); background:var(--bg-3); border:1px solid var(--fg-10); padding:4px 10px; border-radius:6px; }
+        .sitemap-card__note { font-size:11px; color:var(--fg-45); margin-top:8px; line-height:1.5; font-style:italic; }
+
+        /* Site diagram */
+        .site-diagram { display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px; margin-bottom:16px; }
+        .site-diagram__item { background:var(--bg-2); border:1px solid var(--fg-10); border-radius:8px; padding:10px 14px; text-align:center; }
+        .site-diagram__item--accent { border-color:rgba(26,26,26,0.2); background:rgba(26,26,26,0.03); }
+        .site-diagram__name { font-family:'Unbounded',sans-serif; font-size:10px; font-weight:500; }
+        .site-diagram__sub { font-size:9px; color:var(--fg-45); margin-top:2px; }
+        .site-diagram__header { grid-column:1/-1; background:linear-gradient(135deg,rgba(26,26,26,0.05) 0%,rgba(26,26,26,0.02) 100%); border:1px solid rgba(26,26,26,0.12); border-radius:10px; padding:14px 20px; text-align:center; }
+        .site-diagram__header-title { font-family:'Unbounded',sans-serif; font-size:12px; font-weight:500; color:var(--accent); }
+        .site-diagram__header-sub { font-size:10px; color:var(--fg-45); margin-top:4px; }
+
+        /* Feature grid */
+        .feature-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+        .feature-group { background:var(--bg-2); border:1px solid var(--fg-10); border-radius:10px; padding:18px 20px; }
+        .feature-group__title { font-family:'Unbounded',sans-serif; font-size:11px; font-weight:500; color:var(--accent); margin-bottom:10px; }
+        .feature-group__list { list-style:none; }
+        .feature-group__list li { font-size:11px; color:var(--fg-70); line-height:1.6; padding:3px 0 3px 14px; position:relative; }
+        .feature-group__list li::before { content:'—'; position:absolute; left:0; color:var(--fg-25); }
+
+        /* Solution */
+        .solution-summary { background:linear-gradient(135deg,rgba(26,26,26,0.04) 0%,rgba(26,26,26,0.01) 100%); border:1px solid rgba(26,26,26,0.1); border-radius:12px; padding:28px; margin-bottom:24px; }
+        .solution-summary__title { font-family:'Unbounded',sans-serif; font-size:13px; font-weight:500; color:var(--accent); margin-bottom:12px; }
+        .solution-summary__text { font-size:13px; color:var(--fg-70); line-height:1.8; }
+        .solution-summary__stack { display:flex; gap:10px; margin-top:16px; flex-wrap:wrap; }
+        .solution-summary__badge { background:var(--bg-3); border:1px solid var(--fg-25); border-radius:8px; padding:6px 14px; font-size:11px; font-weight:600; color:var(--fg-100); }
+
+        /* Note */
+        .diagram-note { font-size:11px; color:var(--fg-45); line-height:1.6; padding:12px 16px; background:var(--bg-1); border-radius:8px; border-left:3px solid var(--accent); margin-top:16px; margin-bottom:16px; }
+        .diagram-note strong { color:var(--fg-70); }
+
+        /* Page footer */
+        .page-number { position:absolute; bottom:36px; right:56px; font-size:11px; color:var(--fg-25); font-weight:500; }
+        .page-footer-logo { position:absolute; bottom:36px; left:56px; }
+        .page-footer-logo svg { height:16px; width:auto; opacity:0.25; }
+
+        /* Block list */
+        .block-list { margin-bottom:20px; }
+        .block-item { display:grid; grid-template-columns:32px 1fr; gap:12px; padding:12px 0; border-bottom:1px solid var(--fg-10); }
+        .block-item:last-child { border-bottom:none; }
+        .block-item__num { font-family:'Unbounded',sans-serif; font-size:12px; font-weight:600; color:var(--accent); text-align:center; padding-top:2px; }
+        .block-item__title { font-size:12px; font-weight:600; margin-bottom:4px; }
+        .block-item__desc { font-size:11px; color:var(--fg-70); line-height:1.6; }
+        .block-item__type { font-size:10px; color:var(--fg-45); margin-top:4px; font-style:italic; }
+
+        /* About block */
+        .about-block { background:var(--bg-2); border:1px solid var(--fg-10); border-radius:12px; padding:24px; margin-bottom:20px; }
+        .about-block__title { font-family:'Unbounded',sans-serif; font-size:14px; font-weight:500; color:var(--accent); margin-bottom:10px; }
+        .about-block__text { font-size:12px; color:var(--fg-70); line-height:1.7; }
+
+        /* Contacts */
+        .contacts-block { margin-top:24px; }
+        .contacts-block__name { font-family:'Unbounded',sans-serif; font-size:14px; font-weight:500; margin-bottom:8px; }
+        .contacts-block__line { font-size:12px; color:var(--fg-70); line-height:1.8; }
+
+        /* Conditions */
+        .conditions-list { list-style:none; }
+        .conditions-list li { display:flex; gap:12px; padding:14px 0; border-bottom:1px solid var(--fg-10); }
+        .conditions-list li:last-child { border-bottom:none; }
+        .conditions-list__icon { font-size:16px; min-width:24px; text-align:center; }
+        .conditions-list__label { font-size:12px; font-weight:600; margin-bottom:2px; }
+        .conditions-list__value { font-size:12px; color:var(--fg-70); line-height:1.5; }
+
+        /* Simple table */
+        .simple-table { width:100%; border-collapse:collapse; margin-bottom:16px; }
+        .simple-table th { background:var(--bg-3); color:var(--accent); font-family:'Unbounded',sans-serif; font-size:9px; font-weight:500; text-transform:uppercase; letter-spacing:1px; padding:10px 14px; text-align:left; border-bottom:1px solid var(--fg-10); }
+        .simple-table td { padding:10px 14px; border-bottom:1px solid var(--fg-10); font-size:11px; color:var(--fg-70); }
+        .simple-table td:first-child { color:var(--fg-100); font-weight:500; }
+    </style>
+</head>
+<body>
+    <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+        <defs><symbol id="ml" viewBox="0 0 578 100">
+            <path d="M457.698 69.5985C457.698 70.3159 457.118 70.8973 456.4 70.8973H438.116C437.398 70.8973 436.818 70.3159 436.818 69.5985V67.5455C436.818 66.3429 435.323 65.7864 434.537 66.6959L431.289 70.4484C431.043 70.7334 430.685 70.8973 430.308 70.8973H398.093C397.375 70.8973 396.793 70.3159 396.793 69.5985V62.1954V58.6214V55.203V31.0175C396.793 30.3004 397.375 29.7188 398.093 29.7188H416.378C417.096 29.7188 417.675 30.3004 417.675 31.0175V54.0594C417.675 54.7768 418.258 55.3582 418.976 55.3582H429.891C430.268 55.3582 430.625 55.1949 430.872 54.9104L436.499 48.4211C436.705 48.1848 436.818 47.8828 436.818 47.5701V31.0175C436.818 30.3004 437.398 29.7188 438.116 29.7188H456.4C457.118 29.7188 457.698 30.3004 457.698 31.0175V69.5985Z" fill="#1A1A1A"/>
+            <path d="M522.681 69.5985C522.681 70.3159 522.101 70.8973 521.383 70.8973H503.099C502.381 70.8973 501.798 70.3159 501.798 69.5985V64.9179C501.798 64.2007 501.218 63.6193 500.501 63.6193H483.955C483.24 63.6193 482.658 64.2007 482.658 64.9179V69.5985C482.658 70.3159 482.075 70.8973 481.36 70.8973H463.076C462.358 70.8973 461.775 70.3159 461.775 69.5985V62.1954V58.6214V55.203V31.0175C461.775 30.3004 462.358 29.7188 463.076 29.7188H481.36C482.075 29.7188 482.658 30.3004 482.658 31.0175V52.4767C482.658 53.1938 483.24 53.7755 483.955 53.7755H495.464H500.501C501.218 53.7755 501.798 53.1938 501.798 52.4767V31.0175C501.798 30.3004 502.381 29.7188 503.099 29.7188H521.383C522.101 29.7188 522.681 30.3004 522.681 31.0175V69.5985Z" fill="#1A1A1A"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M164.562 39.7094C165.062 40.1786 165.84 40.1786 166.34 39.7094L176.605 30.0707C176.846 29.8445 177.164 29.7188 177.494 29.7188H201.032C201.749 29.7188 202.331 30.3001 202.331 31.0173V69.5208C202.331 70.2382 201.749 70.8195 201.032 70.8195H182.793C182.076 70.8195 181.495 70.2382 181.495 69.5208V46.5271C181.495 45.81 180.913 45.2286 180.196 45.2286H177.913C177.582 45.2286 177.263 45.3554 177.022 45.5832L166.343 55.676C165.842 56.149 165.059 56.149 164.559 55.676L153.881 45.5832C153.639 45.3554 153.32 45.2286 152.988 45.2286H150.706C149.989 45.2286 149.407 45.81 149.407 46.5271V69.5208C149.407 70.2382 148.826 70.8195 148.109 70.8195H129.87C129.153 70.8195 128.571 70.2382 128.571 69.5208V31.0173C128.571 30.3001 129.153 29.7188 129.87 29.7188H153.407C153.738 29.7188 154.056 29.8445 154.297 30.0707L164.562 39.7094Z" fill="#1A1A1A"/>
+            <path d="M328.936 53.5068C328.936 54.2239 328.353 54.8053 327.635 54.8053H292.4C291.682 54.8053 291.099 55.3869 291.099 56.1041V61.2304V69.5985C291.099 70.3159 290.519 70.8973 289.802 70.8973H271.571C270.855 70.8973 270.273 70.3159 270.273 69.5985V31.0175C270.273 30.3004 270.855 29.7188 271.571 29.7188H291.099H296.515H312.689H320.778H322.889C323.317 29.7188 323.718 29.9301 323.962 30.2831L328.708 37.2056C328.854 37.4218 328.936 37.6778 328.936 37.9398V42.262V53.5068ZM293.006 40.3022C292.289 40.3022 291.709 40.8838 291.709 41.601V45.1541C291.709 45.8715 292.289 46.4529 293.006 46.4529H305.653C306.696 46.4529 307.314 45.2857 306.726 44.4237L304.309 40.8703C304.068 40.5149 303.664 40.3022 303.236 40.3022H293.006Z" fill="#1A1A1A"/>
+            <path d="M207.118 47.1093C207.118 46.3919 207.7 45.8105 208.417 45.8105H243.654C244.371 45.8105 244.953 45.2291 244.953 44.512V40.6842C244.953 39.9671 244.371 39.3857 243.654 39.3857H208.417C207.7 39.3857 207.118 38.804 207.118 38.0869V31.0173C207.118 30.3001 207.7 29.7188 208.417 29.7188H264.481C265.198 29.7188 265.779 30.3001 265.779 31.0173V69.5985C265.779 70.3156 265.198 70.897 264.481 70.897H246.252C245.534 70.897 244.953 70.3156 244.953 69.5985V67.7471C244.953 66.5128 243.393 65.9747 242.632 66.9465L239.928 70.3991C239.682 70.7133 239.305 70.897 238.905 70.897H207.188C207.149 70.897 207.118 70.8661 207.118 70.8277V47.1093ZM238.069 60.3136C238.43 60.3136 238.775 60.1632 239.021 59.8985L242.319 56.3452C243.09 55.5143 242.501 54.1632 241.367 54.1632H229.243C228.526 54.1632 227.944 54.7446 227.944 55.4617V59.0151C227.944 59.7322 228.526 60.3136 229.243 60.3136H238.069Z" fill="#1A1A1A"/>
+            <path d="M332.084 31.2207C332.084 30.5033 332.664 29.9219 333.382 29.9219H351.642C352.36 29.9219 352.942 30.5033 352.942 31.2207V40.7502C352.942 41.4673 353.522 42.0487 354.24 42.0487H368.038C368.428 42.0487 368.796 41.874 369.043 41.5725L371.836 38.1594C372.026 37.9272 372.131 37.6368 372.131 37.3369V31.2207C372.131 30.5033 372.711 29.9219 373.429 29.9219H391.667C392.393 29.9219 392.978 30.5171 392.965 31.2429L392.791 41.3389C392.786 41.7813 392.553 42.1893 392.176 42.4218L381.697 48.8908C380.974 49.3373 380.868 50.3464 381.483 50.934L392.393 61.3739C392.64 61.6118 392.786 61.9388 392.794 62.2826L392.957 69.5315C392.976 70.2603 392.388 70.8598 391.659 70.8598H373.429C372.711 70.8598 372.131 70.2785 372.131 69.5613V62.2091C372.131 61.9092 372.026 61.6185 371.836 61.3866L369.043 57.9733C368.796 57.6721 368.428 57.4971 368.038 57.4971H354.24C353.522 57.4971 352.942 58.0787 352.942 58.7958V69.4838C352.942 70.2012 352.36 70.7826 351.642 70.7826H333.382C332.664 70.7826 332.084 70.2012 332.084 69.4838V31.2207Z" fill="#1A1A1A"/>
+            <path d="M532.924 30.0557L525.498 42.176C525.371 42.3803 525.306 42.6149 525.306 42.8547V57.8874C525.306 58.1269 525.371 58.3618 525.498 58.5661L532.924 70.6864C533.16 71.0717 533.58 71.3066 534.032 71.3066H575.22C575.935 71.3066 576.517 70.7249 576.517 70.0078V62.0815C576.517 61.3644 575.935 60.783 575.22 60.783H551.01C550.675 60.783 550.349 60.6524 550.108 60.4189L548.179 58.559C547.927 58.3141 547.784 57.9768 547.784 57.6244V55.3202V45.2049V43.1175C547.784 42.765 547.927 42.4277 548.179 42.1831L550.108 40.3232C550.349 40.0897 550.675 39.9591 551.01 39.9591H575.756C576.474 39.9591 577.057 39.3777 577.057 38.6603V30.7341C577.057 30.0169 576.474 29.4355 575.756 29.4355H534.032C533.58 29.4355 533.16 29.6704 532.924 30.0557Z" fill="#1A1A1A"/>
+            <path fill-rule="evenodd" clip-rule="evenodd" d="M50.3668 100C50.3668 72.3888 73.2854 50.0001 100.866 50.0001C73.3 50.0001 50.3668 27.6068 50.3668 0C50.3668 27.6068 27.5671 50.0058 0 50.0058C27.5687 50.0058 50.3668 72.3888 50.3668 100Z" fill="#1A1A1A"/>
+        </symbol></defs>
+    </svg>
+
+    <!-- PAGE 1: Title -->
+    <div class="page">
+        <div class="title-page">
+            <div class="title-page__header">
+                <div class="logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+                <div class="title-page__date">5 апреля 2026</div>
+            </div>
+            <div class="title-page__center">
+                <div class="title-page__label">Техническое задание</div>
+                <h1 class="title-page__title">Разработка<br>корпоративного сайта<br>markins.ru</h1>
+                <p class="title-page__subtitle">Имиджевый сайт IT-компании Markins. 7 страниц, тёмная тема, GSAP-анимации, статическая генерация, деплой на GitHub Pages.</p>
+            </div>
+            <div class="title-page__footer">
+                <div class="title-page__client">
+                    <span class="title-page__client-label">Проект</span>
+                    <span class="title-page__client-name">markins.ru</span>
+                </div>
+                <div class="title-page__from">
+                    <span class="title-page__from-label">Подготовлено</span>
+                    <span class="title-page__from-name">Markins</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- PAGE 2: Overview -->
+    <div class="page">
+        <div class="section-number">01</div>
+        <h2 class="section-title">Описание проекта</h2>
+        <p class="section-intro">Имиджевый корпоративный сайт, задача которого — показать масштаб, экспертизу и кейсы Markins потенциальным клиентам.</p>
+
+        <div class="problem-card">
+            <div class="problem-card__icon">1</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">Цель</div>
+                <div class="problem-card__text">Сформировать образ серьёзной, современной IT-компании. Клиент заходит на сайт и понимает масштаб: кто мы, что делали, какие результаты.</div>
+            </div>
+        </div>
+
+        <div class="problem-card">
+            <div class="problem-card__icon">2</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">Целевая аудитория</div>
+                <div class="problem-card__text">Владельцы бизнеса в РФ, которые рассматривают Markins как подрядчика. Приходят по рекомендации или после личной встречи — оценить компанию перед началом сотрудничества.</div>
+            </div>
+        </div>
+
+        <div class="problem-card">
+            <div class="problem-card__icon">3</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">Тон коммуникации</div>
+                <div class="problem-card__text">Спокойный, уверенный, без давления. Мы не продаём — мы показываем. Никаких кричащих призывов. Сайт демонстрирует экспертизу через реальные кейсы и факты.</div>
+            </div>
+        </div>
+
+        <div class="problem-card">
+            <div class="problem-card__icon">4</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">Позиционирование</div>
+                <div class="problem-card__text">«На стыке технологий и здравого смысла». Мост между бизнесом и технологиями. Разработка, AI-автоматизация, CRM, исследования, консалтинг — комплексное решение IT-задач.</div>
+            </div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">2</div>
+    </div>
+
+    <!-- PAGE 3: Tech stack + Sitemap -->
+    <div class="page">
+        <div class="section-number">02</div>
+        <h2 class="section-title">Технический стек</h2>
+
+        <div class="solution-summary">
+            <div class="solution-summary__title">Стек разработки</div>
+            <div class="solution-summary__text">Проект строится на основе существующего репозитория markins-nuxt. Референсная архитектура — проект Радде (radde). Статическая генерация (SSG), деплой на GitHub Pages.</div>
+            <div class="solution-summary__stack">
+                <span class="solution-summary__badge">Nuxt 4</span>
+                <span class="solution-summary__badge">Vue 3</span>
+                <span class="solution-summary__badge">TypeScript</span>
+                <span class="solution-summary__badge">UnoCSS</span>
+                <span class="solution-summary__badge">GSAP</span>
+                <span class="solution-summary__badge">Lenis</span>
+                <span class="solution-summary__badge">pnpm</span>
+                <span class="solution-summary__badge">GitHub Pages</span>
+            </div>
+        </div>
+
+        <div style="margin-top:32px">
+            <div class="section-number">03</div>
+            <h2 class="section-title">Карта сайта</h2>
+        </div>
+
+        <div class="site-diagram">
+            <div class="site-diagram__header">
+                <div class="site-diagram__header-title">markins.ru</div>
+                <div class="site-diagram__header-sub">7 страниц · тёмная тема · GSAP-анимации · адаптив · SSG</div>
+            </div>
+            <div class="site-diagram__item site-diagram__item--accent">
+                <div class="site-diagram__name">Главная</div>
+                <div class="site-diagram__sub">13 блоков, кейсы</div>
+            </div>
+            <div class="site-diagram__item">
+                <div class="site-diagram__name">Услуги</div>
+                <div class="site-diagram__sub">Направления + прайс</div>
+            </div>
+            <div class="site-diagram__item">
+                <div class="site-diagram__name">Проекты</div>
+                <div class="site-diagram__sub">Портфолио + фильтры</div>
+            </div>
+            <div class="site-diagram__item">
+                <div class="site-diagram__name">О нас</div>
+                <div class="site-diagram__sub">Команда, миссия</div>
+            </div>
+            <div class="site-diagram__item">
+                <div class="site-diagram__name">Контакты</div>
+                <div class="site-diagram__sub">Форма + мессенджеры</div>
+            </div>
+            <div class="site-diagram__item">
+                <div class="site-diagram__name">404</div>
+                <div class="site-diagram__sub">Минимал</div>
+            </div>
+            <div class="site-diagram__item">
+                <div class="site-diagram__name">Privacy</div>
+                <div class="site-diagram__sub">Доработка стиля</div>
+            </div>
+        </div>
+
+        <div class="diagram-note">
+            <strong>Шапка:</strong> Лого + навигация (Услуги, Проекты, О нас, Контакты) + телефон + кнопка «Обсудить задачу». Фиксированная, появляется при скролле.
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">3</div>
+    </div>
+
+    <!-- PAGE 4: Homepage blocks 1-7 -->
+    <div class="page">
+        <div class="section-number">04</div>
+        <h2 class="section-title">Главная страница</h2>
+        <p class="section-intro">Центральная страница сайта. 13 блоков, из которых 3 — CTA-формы с разным содержанием. Упор на кейсы и факты.</p>
+
+        <div class="block-list">
+            <div class="block-item">
+                <div class="block-item__num">1</div>
+                <div>
+                    <div class="block-item__title">Hero</div>
+                    <div class="block-item__desc">Заголовок «На стыке технологий и здравого смысла». Подзаголовок «Нейросети для бизнеса». Кнопка «Обсудить задачу». Анимированный лого (звезда), частицы на фоне, GSAP-анимация появления.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">2</div>
+                <div>
+                    <div class="block-item__title">Проблема</div>
+                    <div class="block-item__desc">3 карточки: «Сотни сервисов — непонятно, что подойдёт» · «Подрядчики делают как скажете, а не как надо» · «AI меняет рынок, но непонятно с чего начать». Итог: бизнес теряет время, деньги и возможности.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">3</div>
+                <div>
+                    <div class="block-item__title">Решение</div>
+                    <div class="block-item__desc">«Мы — мост между бизнесом и технологиями». 3 шага: 01 Исследуем задачу → 02 Внедряем → 03 Сопровождаем. Подзаголовок: «Не просто исполняем — разбираемся в задаче, подбираем оптимальный стек решений и доводим до результата».</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">4</div>
+                <div>
+                    <div class="block-item__title">CTA A — Консультация</div>
+                    <div class="block-item__desc">Кнопка «Получить консультацию» → открывает модальное окно с мини-формой: имя + телефон.</div>
+                    <div class="block-item__type">Тип: кнопка → модалка</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">5</div>
+                <div>
+                    <div class="block-item__title">Цифры</div>
+                    <div class="block-item__desc">5 карточек с анимированными счётчиками: «8 лет — опыт в IT и digital» · «56+ — реализованных проектов» · «30+ — специалистов в подрядной сети» · «7 AI + 2 — 2 основателя и 7 нейросетей» · «РФ и Мир — работаем удалённо».</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">6</div>
+                <div>
+                    <div class="block-item__title">Кейсы</div>
+                    <div class="block-item__desc">3 крупных карточки. Каждая: тег отрасли + заголовок + описание + метрики + скриншот. Ellyme (e-commerce, 250K+ пользователей), Зелёное яблоко (x3 рост, бронза Tagline), MyRecept (4000+ без рекламы). Ссылка «Все проекты →».</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">7</div>
+                <div>
+                    <div class="block-item__title">CTA B — Обсудить проект</div>
+                    <div class="block-item__desc">Кнопка «Обсудить проект» → модалка с расширенной формой: компания + имя + телефон + описание задачи.</div>
+                    <div class="block-item__type">Тип: кнопка → модалка</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">4</div>
+    </div>
+
+    <!-- PAGE 5: Homepage blocks 8-13 -->
+    <div class="page">
+        <div class="section-number">04</div>
+        <h2 class="section-title">Главная страница (продолжение)</h2>
+
+        <div class="block-list">
+            <div class="block-item">
+                <div class="block-item__num">8</div>
+                <div>
+                    <div class="block-item__title">Услуги (превью)</div>
+                    <div class="block-item__desc">3 карточки ключевых направлений: IT-сопровождение (от 80 000 ₽/мес), AI-автоматизация (от 100 000 ₽), Маркиз (от 10 000 ₽/мес). Каждая с иконкой, кратким описанием и ценой. Ссылка «Все услуги →».</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">9</div>
+                <div>
+                    <div class="block-item__title">Продукт Маркиз</div>
+                    <div class="block-item__desc">Акцентный блок собственного продукта. Скриншот интерфейса Маркиза + описание: «Собственная AI-платформа для бизнеса. Управляйте CRM, складом, коммуникациями через диалог — голосом или текстом». Логотипы интеграций: Instagram, Notion, 1C, amoCRM, Битрикс24.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">10</div>
+                <div>
+                    <div class="block-item__title">CTA C — Inline-форма</div>
+                    <div class="block-item__desc">Форма встроена прямо в страницу (не модалка): имя + телефон + кнопка «Расскажем подробнее». Визуально отличается от предыдущих CTA — горизонтальная компоновка.</div>
+                    <div class="block-item__type">Тип: inline-форма</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">11</div>
+                <div>
+                    <div class="block-item__title">Публичность</div>
+                    <div class="block-item__desc">«Нас знают и приглашают». 3 карточки: КАВКАЗ.КОД (крупнейшая IT-конференция Дагестана, спикер наряду с AGIMA), бизнес-клуб «Эквиум» (оборот участников 1+ млрд ₽), Центр «Мой Бизнес» (2 года — бесплатный курс по нейросетям). Доп. строка: ГТРК, Россия 1/24, РГВК, БИСОМ, Тажер 2024. Фото с мероприятий.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">12</div>
+                <div>
+                    <div class="block-item__title">Нам доверяют</div>
+                    <div class="block-item__desc">Бегущая строка (marquee) с логотипами клиентов: Мавадда, Лайт, Cargo №1, Salon Interiors, АРСИ, med art, Aistclub, botticelli, Астрамед и другие.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">13</div>
+                <div>
+                    <div class="block-item__title">Финальный блок</div>
+                    <div class="block-item__desc">Полная форма обратной связи: компания, имя, телефон, описание задачи + чекбокс приватности. Рядом — прямые контакты обоих основателей с фото: Марк Кайтмазов (+7 989 896 69 50, WhatsApp, Telegram, Instagram) и Магомед Ахмедов (+7 963 798 4342, WhatsApp, Telegram). Email: info@markins.ru.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">5</div>
+    </div>
+
+    <!-- PAGE 6: Services page -->
+    <div class="page">
+        <div class="section-number">05</div>
+        <h2 class="section-title">Страница «Услуги»</h2>
+
+        <div class="sitemap-card" style="margin-bottom:14px">
+            <div class="sitemap-card__header">
+                <span class="sitemap-card__title">/services</span>
+            </div>
+            <ul class="sitemap-card__blocks">
+                <li>Hero</li>
+                <li>Ключевые направления (3)</li>
+                <li>Все услуги (таблица)</li>
+                <li>Как мы работаем (5 шагов)</li>
+                <li>CTA</li>
+            </ul>
+        </div>
+
+        <div class="block-list">
+            <div class="block-item">
+                <div class="block-item__num">1</div>
+                <div>
+                    <div class="block-item__title">Hero</div>
+                    <div class="block-item__desc">«Полный спектр IT-услуг» + подзаголовок.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">2</div>
+                <div>
+                    <div class="block-item__title">Ключевые направления</div>
+                    <div class="block-item__desc">3 крупные карточки с иконкой, описанием и ценой: IT-сопровождение (от 80 000 ₽/мес) — полное управление IT-процессами; AI-автоматизация (от 100 000 ₽) — AI-агенты для обработки обращений, документов; Маркиз (от 10 000 ₽/мес) — собственная AI-платформа.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">3</div>
+                <div>
+                    <div class="block-item__title">Все услуги</div>
+                    <div class="block-item__desc">Таблица/список с ценовыми вилками: Разработка лендингов (70–100K ₽), Разработка на CMS (500–700K ₽), Разработка с нуля (от 1M ₽), Обучение нейросетям (3–5K ₽/час), Классическая автоматизация (от 200K ₽), Исследования (50–500K ₽).</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">4</div>
+                <div>
+                    <div class="block-item__title">Как мы работаем</div>
+                    <div class="block-item__desc">5 шагов горизонтально: 01 Запрос (вы описываете задачу — мы задаём вопросы) → 02 Исследование (подбираем решение, готовим ТЗ) → 03 Смета (варианты по бюджету, план, условия) → 04 Работа (договор → этапы → сдача) → 05 Результат (поддержка, развитие, новые решения).</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">5</div>
+                <div>
+                    <div class="block-item__title">CTA</div>
+                    <div class="block-item__desc">Кнопка «Обсудить задачу» → модалка с формой.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">6</div>
+    </div>
+
+    <!-- PAGE 7: Projects page -->
+    <div class="page">
+        <div class="section-number">06</div>
+        <h2 class="section-title">Страница «Проекты»</h2>
+
+        <div class="sitemap-card" style="margin-bottom:14px">
+            <div class="sitemap-card__header">
+                <span class="sitemap-card__title">/projects</span>
+            </div>
+            <ul class="sitemap-card__blocks">
+                <li>Hero + фильтры</li>
+                <li>Основные кейсы (3)</li>
+                <li>Портфолио (5+)</li>
+                <li>Клиенты (логотипы)</li>
+                <li>CTA</li>
+            </ul>
+        </div>
+
+        <div class="block-list">
+            <div class="block-item">
+                <div class="block-item__num">1</div>
+                <div>
+                    <div class="block-item__title">Hero + фильтры</div>
+                    <div class="block-item__desc">«Наши проекты». Теги-фильтры: E-commerce, AI, CRM, Исследования, Разработка — фильтруют список ниже.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">2</div>
+                <div>
+                    <div class="block-item__title">Основные кейсы</div>
+                    <div class="block-item__desc">Ellyme — e-commerce с нуля, 250K+ пользователей/год, 5000+ посетителей/мес. Зелёное яблоко — x3 рост продаж, 100K+ пользователей, бронза Tagline. MyRecept — 4000+ посетителей/мес, 5 филиалов, 0₽ рекламы. Каждый: тег отрасли/города, описание задачи + решения + результата, скриншот, метрики, ссылка на сайт.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">3</div>
+                <div>
+                    <div class="block-item__title">Портфолио</div>
+                    <div class="block-item__desc">Компактные карточки: InvoiceMan (фото → приёмка в МойСклад, 15 мин → 2-3 мин), ОРТОСИТИ (исследование + прототип), Brabus Russia (воронка прогрева), DELO (CRM + автоматизация), Бисмар (UX/UI экосистемы).</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">4</div>
+                <div>
+                    <div class="block-item__title">Нам доверяют</div>
+                    <div class="block-item__desc">Логотипы клиентов (те же, что на главной).</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">5</div>
+                <div>
+                    <div class="block-item__title">CTA</div>
+                    <div class="block-item__desc">Кнопка «Обсудить проект» → модалка с формой.</div>
+                </div>
+            </div>
+        </div>
+
+        <div style="margin-top:32px">
+            <div class="section-number">07</div>
+            <h2 class="section-title">Страница «О нас»</h2>
+        </div>
+
+        <div class="sitemap-card">
+            <div class="sitemap-card__header">
+                <span class="sitemap-card__title">/about</span>
+            </div>
+            <ul class="sitemap-card__blocks">
+                <li>Hero</li>
+                <li>Миссия</li>
+                <li>Основатели (2 карточки)</li>
+                <li>Команда (AI + подрядчики)</li>
+                <li>Публичность</li>
+                <li>Цифры</li>
+            </ul>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">7</div>
+    </div>
+
+    <!-- PAGE 8: About details + Contacts + 404 + Privacy -->
+    <div class="page">
+        <div class="section-number">07</div>
+        <h2 class="section-title">Страница «О нас» (детали)</h2>
+
+        <div class="block-list" style="margin-bottom:28px">
+            <div class="block-item">
+                <div class="block-item__num">1</div>
+                <div>
+                    <div class="block-item__title">Hero</div>
+                    <div class="block-item__desc">«Кто стоит за markins».</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">2</div>
+                <div>
+                    <div class="block-item__title">Миссия</div>
+                    <div class="block-item__desc">«Не просто исполняем — разбираемся в задаче, подбираем оптимальный стек решений и доводим до результата». Визуальная схема: Бизнес ←→ Markins ←→ Технологии.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">3</div>
+                <div>
+                    <div class="block-item__title">Основатели</div>
+                    <div class="block-item__desc">Марк Кайтмазов — Product & IT, сооснователь. 8 лет в IT, внедрение нейросетей, спикер конференций. Магомед Ахмедов — бизнес-архитектор, сооснователь. 12 лет автоматизирует бизнесы. Фото, роль, описание, контакты.</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">4</div>
+                <div>
+                    <div class="block-item__title">Команда</div>
+                    <div class="block-item__desc">«+7 нейросетей в роли полноценных сотрудников + сеть из 30+ подрядчиков по всем digital-направлениям».</div>
+                </div>
+            </div>
+            <div class="block-item">
+                <div class="block-item__num">5</div>
+                <div>
+                    <div class="block-item__title">Публичность + Цифры</div>
+                    <div class="block-item__desc">Те же блоки, что на главной, с фото и карточками выступлений.</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-number">08</div>
+        <h2 class="section-title">Страница «Контакты»</h2>
+
+        <div class="sitemap-card" style="margin-bottom:14px">
+            <div class="sitemap-card__header">
+                <span class="sitemap-card__title">/contacts</span>
+            </div>
+            <ul class="sitemap-card__blocks">
+                <li>Контакты основателей</li>
+                <li>Мессенджеры</li>
+                <li>Email</li>
+                <li>Форма обратной связи</li>
+            </ul>
+            <div class="sitemap-card__note">Прямые контакты обоих основателей, все мессенджеры (WhatsApp, Telegram, MAX), email info@markins.ru, полная форма с чекбоксом приватности.</div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">8</div>
+    </div>
+
+    <!-- PAGE 9: 404, Privacy, Design system -->
+    <div class="page">
+        <div class="section-number">09</div>
+        <h2 class="section-title">404 и Privacy</h2>
+
+        <div class="problem-card" style="margin-bottom:12px">
+            <div class="problem-card__icon">•</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">Страница 404</div>
+                <div class="problem-card__text">Минималистичная: лого, текст «Страница не найдена», кнопка «На главную». В стилистике остального сайта.</div>
+            </div>
+        </div>
+
+        <div class="problem-card" style="margin-bottom:28px">
+            <div class="problem-card__icon">•</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">Политика конфиденциальности</div>
+                <div class="problem-card__text">Существующая страница /privacy — доработать дизайн под общую стилистику сайта (типографика, отступы, навигация).</div>
+            </div>
+        </div>
+
+        <div class="section-number">10</div>
+        <h2 class="section-title">Дизайн-система</h2>
+
+        <div class="feature-grid">
+            <div class="feature-group">
+                <div class="feature-group__title">Цвета</div>
+                <ul class="feature-group__list">
+                    <li>#09090B — основной фон (dark)</li>
+                    <li>#101010 — тёмный</li>
+                    <li>#D5CDBA — бежевый акцент</li>
+                    <li>#E5D4AD — светлый бежевый</li>
+                    <li>#BC6A56 — rust</li>
+                    <li>#91BD57 — зелёный</li>
+                    <li>#7757BD — фиолетовый</li>
+                    <li>#757575 — серый</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Типографика</div>
+                <ul class="feature-group__list">
+                    <li>Unbounded — заголовки, цифры</li>
+                    <li>Commissioner — основной текст</li>
+                    <li>Веса: 300, 400, 500, 600, 700</li>
+                    <li>Размеры: clamp() для адаптива</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Анимации</div>
+                <ul class="feature-group__list">
+                    <li>GSAP ScrollTrigger — появление блоков</li>
+                    <li>Lenis — плавный скролл</li>
+                    <li>Hover-эффекты на карточках</li>
+                    <li>Анимированные счётчики цифр</li>
+                    <li>Marquee для логотипов</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Адаптив (брейкпоинты)</div>
+                <ul class="feature-group__list">
+                    <li>xs: 375px</li>
+                    <li>sm: 640px</li>
+                    <li>md: 768px</li>
+                    <li>lg: 1024px</li>
+                    <li>xl: 1280px</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">9</div>
+    </div>
+
+    <!-- PAGE 10: Functional, SEO, Deploy -->
+    <div class="page">
+        <div class="section-number">11</div>
+        <h2 class="section-title">Функционал и интеграции</h2>
+
+        <div class="feature-grid" style="margin-bottom:28px">
+            <div class="feature-group">
+                <div class="feature-group__title">Формы</div>
+                <ul class="feature-group__list">
+                    <li>3 CTA-формы на главной (разные)</li>
+                    <li>Форма на странице Контакты</li>
+                    <li>Модальные окна</li>
+                    <li>Валидация полей (телефон, обязат.)</li>
+                    <li>Маска телефона (+7 ...)</li>
+                    <li>Состояние отправки / успех</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Навигация</div>
+                <ul class="feature-group__list">
+                    <li>Фиксированная шапка при скролле</li>
+                    <li>Мобильное меню (бургер)</li>
+                    <li>Плавный скролл (Lenis)</li>
+                    <li>Подсветка активного пункта</li>
+                    <li>Переходы между страницами</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">SEO</div>
+                <ul class="feature-group__list">
+                    <li>Meta-теги (title, description) на каждой</li>
+                    <li>Open Graph теги</li>
+                    <li>Schema.org: Organization, Service</li>
+                    <li>Sitemap.xml</li>
+                    <li>Robots.txt</li>
+                    <li>Семантическая HTML-разметка</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Производительность</div>
+                <ul class="feature-group__list">
+                    <li>SSG (статическая генерация)</li>
+                    <li>Ленивая загрузка изображений</li>
+                    <li>Оптимизация шрифтов (preconnect)</li>
+                    <li>will-change для анимаций</li>
+                    <li>LCP < 2.5s</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section-number">12</div>
+        <h2 class="section-title">Деплой и доступность</h2>
+
+        <div class="problem-card" style="margin-bottom:12px">
+            <div class="problem-card__icon">→</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">GitHub Pages (текущий)</div>
+                <div class="problem-card__text">SSG через `pnpm generate` → .output/public/ → GitHub Actions → GitHub Pages. Домен markins.ru через CNAME. Временное решение для быстрого запуска.</div>
+            </div>
+        </div>
+
+        <div class="problem-card" style="margin-bottom:12px">
+            <div class="problem-card__icon">→</div>
+            <div class="problem-card__content">
+                <div class="problem-card__title">Миграция (следующий этап)</div>
+                <div class="problem-card__text">Перенос на российский хостинг (Selectel / Timeweb / VK Cloud) для гарантированной доступности из РФ, поддержки SSR и лучшего SEO в Яндексе.</div>
+            </div>
+        </div>
+
+        <div class="diagram-note">
+            <strong>Важно:</strong> GitHub Pages в РФ может быть ограничен для части пользователей. Для коммерческого сайта рекомендуется миграция на российский хостинг после запуска MVP.
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">10</div>
+    </div>
+
+    <!-- PAGE 11: Data sources + Contacts -->
+    <div class="page">
+        <div class="section-number">13</div>
+        <h2 class="section-title">Источники данных</h2>
+        <p class="section-intro">Все тексты, кейсы, метрики и контакты берутся из существующих материалов компании.</p>
+
+        <table class="simple-table" style="margin-bottom:28px">
+            <thead><tr><th>Тип данных</th><th>Источник</th></tr></thead>
+            <tbody>
+                <tr><td>Тексты, позиционирование</td><td>Презентация markins.pdf + about_markins.md</td></tr>
+                <tr><td>Кейсы и метрики</td><td>about_markins/cases_markins.md</td></tr>
+                <tr><td>Услуги и цены</td><td>about_markins/services_markins.md</td></tr>
+                <tr><td>Дизайн-ассеты (лого, иконки)</td><td>about_markins/markins_design/</td></tr>
+                <tr><td>Фото основателей</td><td>Предоставляются отдельно</td></tr>
+                <tr><td>Скриншоты кейсов</td><td>Предоставляются отдельно</td></tr>
+                <tr><td>Логотипы клиентов</td><td>Предоставляются отдельно</td></tr>
+                <tr><td>Фото с мероприятий</td><td>Предоставляются отдельно</td></tr>
+            </tbody>
+        </table>
+
+        <div class="section-number">14</div>
+        <h2 class="section-title">Компонентная архитектура</h2>
+
+        <div class="feature-grid">
+            <div class="feature-group">
+                <div class="feature-group__title">Layouts</div>
+                <ul class="feature-group__list">
+                    <li>default.vue — шапка + футер</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Composables</div>
+                <ul class="feature-group__list">
+                    <li>useLenis — плавный скролл</li>
+                    <li>useGsap — анимации</li>
+                    <li>usePhoneMask — маска телефона</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Компоненты (UI)</div>
+                <ul class="feature-group__list">
+                    <li>AppHeader — шапка</li>
+                    <li>AppFooter — подвал</li>
+                    <li>ContactModal — модалка формы</li>
+                    <li>ContactForm — встроенная форма</li>
+                    <li>CaseCard — карточка кейса</li>
+                    <li>ServiceCard — карточка услуги</li>
+                    <li>StatCounter — анимир. счётчик</li>
+                    <li>ClientLogos — marquee логотипов</li>
+                </ul>
+            </div>
+            <div class="feature-group">
+                <div class="feature-group__title">Компоненты (секции)</div>
+                <ul class="feature-group__list">
+                    <li>SectionHero</li>
+                    <li>SectionProblem</li>
+                    <li>SectionSolution</li>
+                    <li>SectionStats</li>
+                    <li>SectionCases</li>
+                    <li>SectionServices</li>
+                    <li>SectionMarkiz</li>
+                    <li>SectionPublicity</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">11</div>
+    </div>
+
+    <!-- PAGE 12: Conditions + Contacts -->
+    <div class="page">
+        <div class="section-number">15</div>
+        <h2 class="section-title">Контакты</h2>
+
+        <div class="about-block">
+            <div class="about-block__title">Markins</div>
+            <div class="about-block__text">IT-компания. Разработка, AI-автоматизация, CRM-внедрения, исследования, консалтинг. На стыке технологий и здравого смысла.</div>
+        </div>
+
+        <div class="contacts-block">
+            <div class="contacts-block__name">Марк Кайтмазов</div>
+            <div class="contacts-block__line">Product & IT, сооснователь</div>
+            <div class="contacts-block__line">+7 989 896 69 50 (звонки / WhatsApp)</div>
+            <div class="contacts-block__line">Telegram: @kaitmazovmark</div>
+        </div>
+
+        <div class="page-footer-logo"><svg width="578" height="100"><use href="#ml"/></svg></div>
+        <div class="page-number">12</div>
+    </div>
+
+</body>
+</html>
