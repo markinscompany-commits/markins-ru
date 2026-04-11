@@ -1,736 +1,180 @@
 <template>
-  <div ref="mainContent">
-    <!-- Contact Modal -->
-    <UiContactModal v-model="contactOpen" />
+  <div class="min-h-screen bg-mk-black relative overflow-hidden">
 
-    <!-- Cookie Banner -->
-    <UiCookieBanner />
+    <!-- Animated background grid -->
+    <div class="absolute inset-0 grid-bg opacity-0" ref="gridRef"></div>
 
-    <!-- ===== BLOCK 1: Hero (BLACK bg) ===== -->
-    <section class="relative min-h-screen flex flex-col bg-mk-black overflow-hidden">
-      <!-- Animated grid background -->
-      <div class="absolute inset-0 hero-grid-bg"></div>
-      <!-- Floating star particles — blurred light points -->
-      <div class="absolute inset-0 pointer-events-none overflow-hidden">
-        <div
-          v-for="i in 8"
-          :key="i"
-          class="hero-star absolute"
-          :style="{
-            top: starPositions[i-1].top,
-            left: starPositions[i-1].left,
-            width: starPositions[i-1].size + 'px',
-            height: starPositions[i-1].size + 'px',
-          }"
-          :class="'hero-star-' + i"
-        />
-      </div>
-
-      <div class="container relative z-10 flex-1 flex flex-col justify-end pb-10 md:pb-12">
-        <div class="max-w-5xl mx-auto w-full">
-          <!-- Subtitle pills — ABOVE heading -->
-          <div class="flex flex-row flex-wrap items-center gap-3 mb-8">
-            <span
-              v-for="(word, i) in subtitleWords"
-              :key="i"
-              class="font-body text-[11px] sm:text-xs font-500 text-[#E8E0D2]/35 tracking-[0.2em] uppercase border border-[#E8E0D2]/12 px-3 py-1 inline-block"
-            >{{ word }}</span>
-          </div>
-
-          <!-- H1 — split into 2 lines, red comma -->
-          <h1 class="font-display text-[2.5rem] sm:text-[3.5rem] md:text-[4.5rem] lg:text-[5.5rem] xl:text-[6.5rem] font-600 leading-[1.0] tracking-tight text-[#E8E0D2]/85">
-            Айтишники<span class="text-mk-rust">,</span><br>которым не нужно<br>объяснять дважды
-          </h1>
-        </div>
-      </div>
-
-      <!-- Client logos marquee with fade edges -->
-      <div class="relative pb-10 pt-6">
-        <div class="absolute inset-y-0 left-0 w-20 md:w-32 bg-gradient-to-r from-mk-black to-transparent z-10 pointer-events-none" />
-        <div class="absolute inset-y-0 right-0 w-20 md:w-32 bg-gradient-to-l from-mk-black to-transparent z-10 pointer-events-none" />
-        <UiClientLogos />
-      </div>
-    </section>
-
-    <!-- ===== BLOCK 2: Cases (beige bg) ===== -->
-    <section id="cases" class="py-24 md:py-32 bg-mk-bg">
-      <div class="container">
-        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-600 text-mk-black mb-14 md:mb-20">
-          Проекты
-        </h2>
-
-        <!-- Bento Grid: 5 cases only -->
-        <div class="bento-grid">
-          <!-- Row 1: Featured (2col) + Medium -->
-          <div class="bento-featured">
-            <UiCaseCard
-              :title="cases[0].title"
-              :description="cases[0].description"
-              :metrics="cases[0].metrics"
-              :tags="cases[0].tags"
-              :link="cases[0].link"
-              :badge="cases[0].badge"
-              size="featured"
-            />
-          </div>
-          <div class="bento-r1-right">
-            <UiCaseCard
-              :title="cases[1].title"
-              :description="cases[1].description"
-              :metrics="cases[1].metrics"
-              :tags="cases[1].tags"
-              :link="cases[1].link"
-              size="medium"
-            />
-          </div>
-
-          <!-- Row 2: 3 small cards -->
-          <div class="bento-r2-left">
-            <UiCaseCard
-              :title="cases[2].title"
-              :description="cases[2].description"
-              :metrics="cases[2].metrics"
-              :tags="cases[2].tags"
-              size="small"
-            />
-          </div>
-          <div class="bento-r2-mid">
-            <UiCaseCard
-              :title="cases[3].title"
-              :description="cases[3].description"
-              :metrics="cases[3].metrics"
-              :tags="cases[3].tags"
-              :link="cases[3].link"
-              size="small"
-            />
-          </div>
-          <div class="bento-r2-right">
-            <UiCaseCard
-              :title="cases[4].title"
-              :description="cases[4].description"
-              :metrics="cases[4].metrics"
-              :tags="cases[4].tags"
-              size="small"
-            />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== BLOCK 3: CTA (BLACK section bg + rust card inside) ===== -->
-    <section class="bg-mk-black py-16 md:py-24">
-      <div class="container">
-        <div
-          class="flex flex-col items-center text-center gap-6 px-8 md:px-12 py-16 md:py-20"
-          style="background: linear-gradient(135deg, #1A1814 0%, #2A2622 50%, #3D352B 100%); border: 1px solid rgba(245,240,235,0.12);"
-        >
-          <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-600 text-[#E8E0D2]/90">
-            Расскажите вашу ситуацию
-          </h2>
-          <p class="font-body text-base text-[#E8E0D2]/60 max-w-xl">
-            Если у вас есть задача, которую сложно описать в двух словах — заполните бриф, и мы всё разберём
-          </p>
-          <a
-            href="#contacts"
-            class="cta-fill-btn inline-block font-body text-base font-500 px-8 py-4 transition-all duration-300 shrink-0 relative overflow-hidden mt-2"
-          >
-            <span class="relative z-10">Заполнить бриф</span>
-          </a>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== BLOCK 4: Markiz (dedicated section) ===== -->
-    <section id="markiz" class="py-24 md:py-32 bg-mk-bg">
-      <div class="container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-center">
-          <!-- Left: Text -->
-          <div>
-            <!-- Markiz "profile card" header: avatar + name + role -->
-            <div class="flex items-center gap-5 mb-8">
-              <!-- Markiz avatar — real image from markiz repo -->
-              <img
-                src="/markiz-avatar.png"
-                alt="Маркиз"
-                class="w-20 h-20 md:w-24 md:h-24 shrink-0 object-cover rounded-full"
-              />
-              <div>
-                <h2 class="font-display text-2xl sm:text-3xl md:text-4xl font-600 text-mk-black leading-none">
-                  {{ markiz.title }}
-                </h2>
-                <p class="font-body text-sm text-mk-gray-500 mt-2">
-                  Разработано в markins
-                </p>
-              </div>
-            </div>
-            <p class="font-body text-base text-mk-gray-500 leading-relaxed mb-8">
-              {{ markiz.description }}
-            </p>
-
-            <!-- Integration logos -->
-            <div class="flex flex-wrap gap-3 mb-10">
-              <span
-                v-for="integration in markiz.integrations"
-                :key="integration"
-                class="font-body text-sm font-500 text-mk-gray-500 bg-mk-gray-100 px-4 py-2"
-              >
-                {{ integration }}
-              </span>
-            </div>
-
-            <!-- CTAs — text links only -->
-            <div class="flex flex-wrap gap-8">
-              <a href="#" class="font-body text-base font-500 text-mk-gray-500 hover:text-mk-black transition-colors duration-200">
-                {{ markiz.ctaPrimary }}
-              </a>
-              <button
-                class="font-body text-base font-500 text-mk-rust hover:text-mk-rust-dark transition-colors duration-200"
-                @click="contactOpen = true"
-              >
-                {{ markiz.ctaSecondary }}
-              </button>
-            </div>
-          </div>
-
-          <!-- Right: Screenshot placeholder (4:3 aspect ratio) -->
-          <div class="bg-mk-gray-100 aspect-[4/3] flex items-center justify-center">
-            <div class="text-center">
-              <svg class="w-16 h-16 text-mk-gray-300 mx-auto mb-3" viewBox="0 0 444 444" fill="currentColor" aria-hidden="true">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M222.21 442C222.21 320.511 322.868 222 444 222C322.932 222 222.21 123.47 222.21 2C222.21 123.47 122.074 222.025 1 222.025C122.081 222.025 222.21 320.511 222.21 442Z" />
-              </svg>
-              <span class="font-body text-base text-mk-gray-400">Скриншот платформы</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== BLOCK 5: Services (BLACK bg) ===== -->
-    <section id="services" class="py-24 md:py-32 bg-mk-black">
-      <div class="container">
-        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-600 text-[#E8E0D2]/90 mb-14 md:mb-20">
-          Услуги
-        </h2>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <UiServiceCard
-            v-for="(s, i) in services"
-            :key="i"
-            :title="s.title"
-            :description="s.description"
-            :price="s.price"
-          />
-
-          <!-- Non-standard requests block — spans 2 remaining cells, clickable -->
-          <div
-            class="md:col-span-2 flex flex-col justify-between px-8 py-8 cursor-pointer transition-all duration-300"
-            style="background: linear-gradient(135deg, #161310 0%, #28231D 50%, #3D3528 100%); border: 1px solid rgba(232,224,210,0.15);"
-            @click="contactOpen = true"
-          >
-            <div>
-              <h3 class="font-display text-xl md:text-2xl font-600 text-[#E8E0D2]/90 mb-3">
-                Работаем с нестандартными запросами
-              </h3>
-              <p class="font-body text-base text-[#E8E0D2]/50 leading-relaxed">
-                Если вашу задачу нет в списке — это не значит, что мы не можем помочь. Расскажите, и мы предложим решение.
-              </p>
-            </div>
-            <span class="cta-fill-btn mt-6 inline-block font-body text-base font-500 px-6 py-3 self-start relative overflow-hidden transition-all duration-300">
-              <span class="relative z-10">Оставить заявку</span>
-            </span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ===== BLOCK 6: How We Work — Horizontal BPMN flowchart (beige bg) ===== -->
-    <section id="process" class="py-24 md:py-32 bg-mk-bg">
-      <div class="container">
-        <div class="flex items-center justify-between mb-14 md:mb-20">
-          <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-600 text-mk-black">
-            Как мы работаем
-          </h2>
-          <!-- Swipe hint — hand gesture -->
-          <span class="hidden md:inline-flex items-center gap-2 font-body text-sm text-mk-gray-400">
-            <span class="swipe-hand inline-block">
-              <svg class="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M18 11V6a2 2 0 0 0-4 0v1M14 10V5a2 2 0 0 0-4 0v5M10 10V6a2 2 0 0 0-4 0v8c0 4 3 7 7 7h1a5 5 0 0 0 5-5v-4a2 2 0 0 0-4 0" />
-              </svg>
-            </span>
-          </span>
-        </div>
-      </div>
-
-      <!-- Horizontal scroll container with drag support -->
+    <!-- Floating particles -->
+    <div class="absolute inset-0 pointer-events-none overflow-hidden">
       <div
-        class="bpmn-scroll-container bg-mk-gray-100"
-        ref="bpmnContainer"
-        @mousedown="onBpmnDragStart"
-        @mousemove="onBpmnDragMove"
-        @mouseup="onBpmnDragEnd"
-        @mouseleave="onBpmnDragEnd"
-      >
-        <div class="bpmn-track">
-          <!-- SVG connector lines behind elements -->
-          <svg class="bpmn-line-svg" :viewBox="`0 0 ${bpmnTrackWidth} ${bpmnTrackHeight}`" preserveAspectRatio="none">
-            <!-- Main horizontal path -->
-            <path
-              :d="bpmnMainPath"
-              fill="none"
-              stroke="#D4CFC9"
-              stroke-width="2"
-              stroke-dasharray="8 6"
-              class="bpmn-animated-path"
-            />
-            <!-- NO branch from "Подходит?" up to red end circle -->
-            <path
-              :d="bpmnNoBranchPath"
-              fill="none"
-              stroke="#D4CFC9"
-              stroke-width="2"
-              stroke-dasharray="8 6"
-              class="bpmn-animated-path"
-            />
-            <!-- Loop: Тестирование → Корректировки → Разработка -->
-            <path
-              :d="bpmnLoopPath"
-              fill="none"
-              stroke="#D4CFC9"
-              stroke-width="2"
-              stroke-dasharray="8 6"
-              class="bpmn-animated-path"
-            />
-            <!-- NO branch from "Поддержка?" down to end -->
-            <path
-              :d="bpmnSupportNoBranchPath"
-              fill="none"
-              stroke="#D4CFC9"
-              stroke-width="2"
-              stroke-dasharray="8 6"
-              class="bpmn-animated-path"
-            />
-            <!-- No arrowheads — dashed line is enough -->
+        v-for="i in 6"
+        :key="i"
+        class="particle absolute rounded-full bg-mk-beige"
+        :ref="(el) => { if (el) particleRefs[i - 1] = el as HTMLElement }"
+      ></div>
+    </div>
+
+    <!-- Main content -->
+    <div class="relative z-10 min-h-screen flex flex-col items-center justify-center px-5">
+
+      <!-- Star logo -->
+      <div ref="logoRef" class="mb-6 opacity-0">
+        <svg class="w-16 h-16 md:w-20 md:h-20" viewBox="0 0 444 444" fill="none">
+          <path fill-rule="evenodd" clip-rule="evenodd"
+            d="M222.21 442C222.21 320.511 322.868 222 444 222C322.932 222 222.21 123.47 222.21 2C222.21 123.47 122.074 222.025 1 222.025C122.081 222.025 222.21 320.511 222.21 442Z"
+            fill="rgba(213,205,186,0.35)" />
+        </svg>
+      </div>
+
+      <!-- Wordmark (text only, no icon) -->
+      <div ref="wordmarkRef" class="opacity-0 mb-4">
+        <svg class="h-5 md:h-6 w-auto" viewBox="128 29 450 43" fill="none" style="opacity: 0.4">
+          <path d="M457.698 69.5985C457.698 70.3159 457.118 70.8973 456.4 70.8973H438.116C437.398 70.8973 436.818 70.3159 436.818 69.5985V67.5455C436.818 66.3429 435.323 65.7864 434.537 66.6959L431.289 70.4484C431.043 70.7334 430.685 70.8973 430.308 70.8973H398.093C397.375 70.8973 396.793 70.3159 396.793 69.5985V62.1954V58.6214V55.203V31.0175C396.793 30.3004 397.375 29.7188 398.093 29.7188H416.378C417.096 29.7188 417.675 30.3004 417.675 31.0175V54.0594C417.675 54.7768 418.258 55.3582 418.976 55.3582H429.891C430.268 55.3582 430.625 55.1949 430.872 54.9104L436.499 48.4211C436.705 48.1848 436.818 47.8828 436.818 47.5701V31.0175C436.818 30.3004 437.398 29.7188 438.116 29.7188H456.4C457.118 29.7188 457.698 30.3004 457.698 31.0175V69.5985Z" fill="#D5CDBA"/>
+          <path d="M522.681 69.5985C522.681 70.3159 522.101 70.8973 521.383 70.8973H503.099C502.381 70.8973 501.798 70.3159 501.798 69.5985V64.9179C501.798 64.2007 501.218 63.6193 500.501 63.6193H483.955C483.24 63.6193 482.658 64.2007 482.658 64.9179V69.5985C482.658 70.3159 482.075 70.8973 481.36 70.8973H463.076C462.358 70.8973 461.775 70.3159 461.775 69.5985V62.1954V58.6214V55.203V31.0175C461.775 30.3004 462.358 29.7188 463.076 29.7188H481.36C482.075 29.7188 482.658 30.3004 482.658 31.0175V52.4767C482.658 53.1938 483.24 53.7755 483.955 53.7755H495.464H500.501C501.218 53.7755 501.798 53.1938 501.798 52.4767V31.0175C501.798 30.3004 502.381 29.7188 503.099 29.7188H521.383C522.101 29.7188 522.681 30.3004 522.681 31.0175V69.5985Z" fill="#D5CDBA"/>
+          <path fill-rule="evenodd" clip-rule="evenodd" d="M164.562 39.7094C165.062 40.1786 165.84 40.1786 166.34 39.7094L176.605 30.0707C176.846 29.8445 177.164 29.7188 177.494 29.7188H201.032C201.749 29.7188 202.331 30.3001 202.331 31.0173V69.5208C202.331 70.2382 201.749 70.8195 201.032 70.8195H182.793C182.076 70.8195 181.495 70.2382 181.495 69.5208V46.5271C181.495 45.81 180.913 45.2286 180.196 45.2286H177.913C177.582 45.2286 177.263 45.3554 177.022 45.5832L166.343 55.676C165.842 56.149 165.059 56.149 164.559 55.676L153.881 45.5832C153.639 45.3554 153.32 45.2286 152.988 45.2286H150.706C149.989 45.2286 149.407 45.81 149.407 46.5271V69.5208C149.407 70.2382 148.826 70.8195 148.109 70.8195H129.87C129.153 70.8195 128.571 70.2382 128.571 69.5208V31.0173C128.571 30.3001 129.153 29.7188 129.87 29.7188H153.407C153.738 29.7188 154.056 29.8445 154.297 30.0707L164.562 39.7094Z" fill="#D5CDBA"/>
+          <path d="M328.936 53.5068C328.936 54.2239 328.353 54.8053 327.635 54.8053H292.4C291.682 54.8053 291.099 55.3869 291.099 56.1041V61.2304V69.5985C291.099 70.3159 290.519 70.8973 289.802 70.8973H271.571C270.855 70.8973 270.273 70.3159 270.273 69.5985V31.0175C270.273 30.3004 270.855 29.7188 271.571 29.7188H291.099H296.515H312.689H320.778H322.889C323.317 29.7188 323.718 29.9301 323.962 30.2831L328.708 37.2056C328.854 37.4218 328.936 37.6778 328.936 37.9398V42.262V53.5068ZM293.006 40.3022C292.289 40.3022 291.709 40.8838 291.709 41.601V45.1541C291.709 45.8715 292.289 46.4529 293.006 46.4529H305.653C306.696 46.4529 307.314 45.2857 306.726 44.4237L304.309 40.8703C304.068 40.5149 303.664 40.3022 303.236 40.3022H293.006Z" fill="#D5CDBA"/>
+          <path d="M207.118 47.1093C207.118 46.3919 207.7 45.8105 208.417 45.8105H243.654C244.371 45.8105 244.953 45.2291 244.953 44.512V40.6842C244.953 39.9671 244.371 39.3857 243.654 39.3857H208.417C207.7 39.3857 207.118 38.804 207.118 38.0869V31.0173C207.118 30.3001 207.7 29.7188 208.417 29.7188H264.481C265.198 29.7188 265.779 30.3001 265.779 31.0173V69.5985C265.779 70.3156 265.198 70.897 264.481 70.897H246.252C245.534 70.897 244.953 70.3156 244.953 69.5985V67.7471C244.953 66.5128 243.393 65.9747 242.632 66.9465L239.928 70.3991C239.682 70.7133 239.305 70.897 238.905 70.897H207.188C207.149 70.897 207.118 70.8661 207.118 70.8277V47.1093ZM238.069 60.3136C238.43 60.3136 238.775 60.1632 239.021 59.8985L242.319 56.3452C243.09 55.5143 242.501 54.1632 241.367 54.1632H229.243C228.526 54.1632 227.944 54.7446 227.944 55.4617V59.0151C227.944 59.7322 228.526 60.3136 229.243 60.3136H238.069Z" fill="#D5CDBA"/>
+          <path d="M332.084 31.2207C332.084 30.5033 332.664 29.9219 333.382 29.9219H351.642C352.36 29.9219 352.942 30.5033 352.942 31.2207V40.7502C352.942 41.4673 353.522 42.0487 354.24 42.0487H368.038C368.428 42.0487 368.796 41.874 369.043 41.5725L371.836 38.1594C372.026 37.9272 372.131 37.6368 372.131 37.3369V31.2207C372.131 30.5033 372.711 29.9219 373.429 29.9219H391.667C392.393 29.9219 392.978 30.5171 392.965 31.2429L392.791 41.3389C392.786 41.7813 392.553 42.1893 392.176 42.4218L381.697 48.8908C380.974 49.3373 380.868 50.3464 381.483 50.934L392.393 61.3739C392.64 61.6118 392.786 61.9388 392.794 62.2826L392.957 69.5315C392.976 70.2603 392.388 70.8598 391.659 70.8598H373.429C372.711 70.8598 372.131 70.2785 372.131 69.5613V62.2091C372.131 61.9092 372.026 61.6185 371.836 61.3866L369.043 57.9733C368.796 57.6721 368.428 57.4971 368.038 57.4971H354.24C353.522 57.4971 352.942 58.0787 352.942 58.7958V69.4838C352.942 70.2012 352.36 70.7826 351.642 70.7826H333.382C332.664 70.7826 332.084 70.2012 332.084 69.4838V31.2207Z" fill="#D5CDBA"/>
+          <path d="M532.924 30.0557L525.498 42.176C525.371 42.3803 525.306 42.6149 525.306 42.8547V57.8874C525.306 58.1269 525.371 58.3618 525.498 58.5661L532.924 70.6864C533.16 71.0717 533.58 71.3066 534.032 71.3066H575.22C575.935 71.3066 576.517 70.7249 576.517 70.0078V62.0815C576.517 61.3644 575.935 60.783 575.22 60.783H551.01C550.675 60.783 550.349 60.6524 550.108 60.4189L548.179 58.559C547.927 58.3141 547.784 57.9768 547.784 57.6244V55.3202V45.2049V43.1175C547.784 42.765 547.927 42.4277 548.179 42.1831L550.108 40.3232C550.349 40.0897 550.675 39.9591 551.01 39.9591H575.756C576.474 39.9591 577.057 39.3777 577.057 38.6603V30.7341C577.057 30.0169 576.474 29.4355 575.756 29.4355H534.032C533.58 29.4355 533.16 29.6704 532.924 30.0557Z" fill="#D5CDBA"/>
+        </svg>
+      </div>
+
+      <!-- Slogan -->
+      <p ref="sloganRef" class="font-display font-400 mb-8 opacity-0 text-center leading-snug" style="font-size: clamp(1.6rem, 5vw, 3rem)">
+        <span class="text-mk-beige/80">На стыке </span>
+        <span class="text-mk-rust font-500">технологий</span>
+        <br>
+        <span class="text-mk-beige/80">и здравого смысла</span>
+      </p>
+
+      <!-- Under construction badge -->
+      <div ref="badgeRef" class="opacity-0 mb-8">
+        <div class="inline-flex items-center gap-2.5 bg-mk-beige/8 border border-mk-beige/15 rounded-full px-5 py-2.5">
+          <span class="w-2 h-2 rounded-full bg-mk-green animate-pulse"></span>
+          <span class="font-body text-mk-beige/70 text-3 md:text-3.5 font-500">Сайт в разработке</span>
+        </div>
+      </div>
+
+      <!-- Contact buttons -->
+      <div ref="contactsRef" class="flex flex-wrap items-center justify-center gap-3 md:gap-4 mb-8 opacity-0">
+        <a href="https://wa.me/79898966950" target="_blank" rel="noopener"
+           class="contact-btn contact-whatsapp">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
           </svg>
+          <span>WhatsApp</span>
+        </a>
 
-          <!-- BPMN nodes on main row -->
-          <div
-            v-for="(node, i) in bpmnNodes"
-            :key="node.id"
-            class="bpmn-node-wrapper"
-            :style="{ left: `${node.x}px`, top: `${node.y}px` }"
-            @click="openStepDetail(node.stepIndex)"
-          >
-            <div
-              class="bpmn-shape transition-all duration-200 cursor-pointer"
-              :class="[
-                node.shape === 'circle-start' ? 'bpmn-circle bpmn-start' : '',
-                node.shape === 'circle-end' ? 'bpmn-circle bpmn-end' : '',
-                node.shape === 'diamond' ? 'bpmn-diamond' : '',
-                node.shape === 'rectangle' ? 'bpmn-rect' : '',
-                hoveredStep === node.stepIndex ? 'bpmn-hover' : '',
-              ]"
-              @mouseenter="hoveredStep = node.stepIndex"
-              @mouseleave="hoveredStep = null"
-            >
-              <span class="bpmn-shape-label">{{ node.title }}</span>
-            </div>
-          </div>
-        </div>
+        <a href="https://t.me/kaitmazovmark" target="_blank" rel="noopener"
+           class="contact-btn contact-telegram">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+          </svg>
+          <span>Telegram</span>
+        </a>
+
+        <a href="https://max.ru/u/f9LHodD0cOISzk20IOL2rGz8wi48hOhVtC_ZXmmj3wp02ulnC98uyaQWWsU" target="_blank" rel="noopener"
+           class="contact-btn contact-max">
+          <svg class="w-5 h-5" viewBox="100 100 800 800" fill="currentColor">
+            <path fill-rule="evenodd" d="M508.211 878.328c-75.007 0-109.864-10.95-170.453-54.75-38.325 49.275-159.686 87.783-164.979 21.9 0-49.456-10.95-91.248-23.36-136.873-14.782-56.21-31.572-118.807-31.572-209.508 0-216.626 177.754-379.597 388.357-379.597 210.785 0 375.947 171.001 375.947 381.604.707 207.346-166.595 376.118-373.94 377.224m3.103-571.585c-102.564-5.292-182.499 65.7-200.201 177.024-14.6 92.162 11.315 204.398 33.397 210.238 10.585 2.555 37.23-18.98 53.837-35.587a189.8 189.8 0 0 0 92.71 33.032c106.273 5.112 197.08-75.794 204.215-181.95 4.154-106.382-77.67-196.486-183.958-202.574Z" clip-rule="evenodd"/>
+          </svg>
+          <span>MAX</span>
+        </a>
+
+        <a href="tel:+79898966950"
+           class="contact-btn contact-phone">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          <span>Позвонить</span>
+        </a>
+
+        <!-- Request button (opens modal) -->
+        <button @click="showModal = true" class="contact-btn contact-request">
+          <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+          </svg>
+          <span>Оставить заявку</span>
+        </button>
       </div>
+    </div>
 
-      <!-- Step detail popup -->
-      <Teleport to="body">
-        <Transition name="step-popup">
-          <div
-            v-if="activeStep !== null"
-            class="fixed inset-0 z-100 flex items-center justify-center p-4"
-            @click.self="activeStep = null"
-            @keydown.esc="activeStep = null"
-          >
-            <div class="absolute inset-0 bg-mk-black/30 backdrop-blur-sm" @click="activeStep = null" />
-            <div class="relative bg-[#F5F0EB] border border-mk-gray-200 w-full max-w-sm p-6 md:p-8 shadow-2xl">
-              <button
-                class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center text-mk-gray-400 hover:text-mk-black transition-colors"
-                @click="activeStep = null"
-              >
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M2 2L14 14M14 2L2 14" />
-                </svg>
-              </button>
-              <div class="flex items-center gap-3 mb-4">
-                <span class="font-display text-3xl font-700 text-mk-gray-300">{{ allStepDescriptions[activeStep].number }}</span>
-              </div>
-              <h3 class="font-display text-xl font-600 text-mk-black mb-3">{{ allStepDescriptions[activeStep].title }}</h3>
-              <p class="font-body text-base text-mk-gray-500 leading-relaxed">{{ allStepDescriptions[activeStep].description }}</p>
-            </div>
-          </div>
-        </Transition>
-      </Teleport>
-    </section>
-
-    <!-- ===== BLOCK 7: Stats (BLACK bg) ===== -->
-    <section class="py-20 md:py-28 bg-mk-black">
-      <div class="container">
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-12 md:gap-8">
-          <div
-            v-for="(stat, i) in stats"
-            :key="i"
-            class="flex flex-col gap-3"
-          >
-            <span class="font-display text-4xl md:text-5xl lg:text-6xl font-700 text-[#E8E0D2]/90">
-              {{ stat.value }}
-            </span>
-            <span class="font-body text-base text-[#E8E0D2]/50 leading-relaxed">
-              {{ stat.label }}
-            </span>
-          </div>
-        </div>
+    <!-- Footer -->
+    <footer ref="footerRef" class="relative z-10 text-center py-8 opacity-0">
+      <div class="flex items-center justify-center gap-4 mb-3">
+        <NuxtLink to="/privacy" class="font-body text-mk-beige/25 text-2.5 md:text-3 hover:text-mk-beige/50 transition-colors duration-300">
+          Политика конфиденциальности
+        </NuxtLink>
       </div>
-    </section>
+      <p class="font-body text-mk-beige/25 text-2.5 md:text-3">
+        &copy; 2026 markins. Все права защищены
+      </p>
+    </footer>
 
-    <!-- ===== BLOCK 8: Contact Form + Footer (beige bg) ===== -->
-    <section id="contacts" class="py-24 md:py-32 bg-mk-bg">
-      <div class="container">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-20">
-          <!-- Left: Contact form -->
-          <div>
-            <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-600 text-mk-black mb-3">
-              Давайте обсудим ваш проект
-            </h2>
-            <p class="font-body text-lg text-mk-gray-500 mb-10">
-              Расскажите о задаче — предложим решение и оценим сроки
-            </p>
-
-            <form class="flex flex-col gap-4" @submit.prevent="finalSubmitted = true">
-              <input
-                v-model="finalForm.company"
-                type="text"
-                placeholder="Компания"
-                class="contact-input"
-              />
-              <input
-                v-model="finalForm.name"
-                type="text"
-                placeholder="Имя"
-                required
-                class="contact-input"
-              />
-              <input
-                v-model="finalForm.position"
-                type="text"
-                placeholder="Должность"
-                class="contact-input"
-              />
-              <input
-                v-model="finalForm.phone"
-                type="tel"
-                placeholder="+7 ___ ___ __ __"
-                required
-                class="contact-input"
-                @input="onFinalPhoneInput"
-              />
-              <textarea
-                v-model="finalForm.task"
-                placeholder="Расскажите о задаче"
-                rows="4"
-                class="contact-input resize-none"
-              />
-
-              <label class="flex items-start gap-2.5 cursor-pointer">
-                <input
-                  v-model="finalForm.privacy"
-                  type="checkbox"
-                  required
-                  class="mt-1 w-4 h-4 border-mk-gray-300 accent-mk-rust shrink-0"
-                />
-                <span class="font-body text-sm text-mk-gray-400 leading-relaxed">
-                  Даю согласие на обработку
-                  <NuxtLink to="/privacy" class="underline hover:text-mk-gray-600">персональных данных</NuxtLink>
-                </span>
-              </label>
-
-              <button
-                v-if="!finalSubmitted"
-                type="submit"
-                :disabled="!finalForm.privacy"
-                class="bg-mk-rust hover:bg-mk-rust-dark disabled:opacity-40 disabled:cursor-not-allowed text-[#F5F0EB] font-body font-500 text-base py-3.5 transition-colors duration-200 w-full md:w-auto md:px-10 mt-2"
-              >
-                Отправить
-              </button>
-              <div v-else class="flex items-center gap-2 text-green-600 font-body text-base mt-2">
+    <!-- Modal overlay -->
+    <Teleport to="body">
+      <Transition name="backdrop">
+        <div v-if="showModal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-5" @click.self="showModal = false">
+          <Transition name="popup">
+            <div v-if="showModal" class="modal-card">
+              <!-- Close button -->
+              <button @click="showModal = false" class="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full text-mk-beige/40 hover:text-mk-beige hover:bg-mk-beige/10 transition-all duration-200">
                 <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" />
+                  <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
                 </svg>
-                Заявка отправлена. Свяжемся в течение часа.
-              </div>
-            </form>
-          </div>
+              </button>
 
-          <!-- Right: Founders + contacts (aligned with form first input) -->
-          <div class="flex flex-col gap-12 lg:pt-[210px]">
-            <div>
-              <h3 class="font-display text-xl font-600 text-mk-black mb-8">Напрямую</h3>
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
-                <div
-                  v-for="(f, i) in founders"
-                  :key="i"
-                  class="flex flex-col gap-1"
-                >
-                  <h4 class="font-display text-base font-600 text-mk-black">{{ f.name }}</h4>
-                  <span class="font-body text-sm text-mk-gray-500">{{ f.role }}</span>
-                  <a :href="f.phoneHref" class="font-body text-base text-mk-gray-600 hover:text-mk-black transition-colors mt-1">
-                    {{ f.phone }}
-                  </a>
-                </div>
-              </div>
+              <h2 class="font-display text-mk-beige text-5 md:text-6 font-600 mb-2">Оставить заявку</h2>
+              <p class="font-body text-mk-beige/40 text-3.5 mb-6">Расскажите о вашей задаче — мы свяжемся</p>
+
+              <form @submit.prevent="handleSubmit" class="flex flex-col gap-3">
+                <input v-model="form.company" type="text" placeholder="Название компании" class="form-input" />
+                <input v-model="form.name" type="text" placeholder="Ваше имя" class="form-input" required />
+                <input v-model="form.position" type="text" placeholder="Должность" class="form-input" />
+                <input v-model="form.phone" type="tel" placeholder="Номер телефона" class="form-input" required />
+                <textarea v-model="form.task" placeholder="Опишите задачу" rows="3" class="form-input form-textarea"></textarea>
+
+                <!-- Privacy policy checkbox -->
+                <label class="flex items-start gap-2.5 cursor-pointer mt-1">
+                  <input v-model="form.privacy" type="checkbox" required class="mt-1 accent-mk-beige w-4 h-4 shrink-0" />
+                  <span class="font-body text-mk-beige/40 text-2.8 leading-snug">
+                    Нажимая кнопку, вы соглашаетесь с
+                    <NuxtLink to="/privacy" target="_blank" class="text-mk-beige/60 underline underline-offset-2 hover:text-mk-beige transition-colors">политикой конфиденциальности</NuxtLink>
+                  </span>
+                </label>
+
+                <button type="submit" class="form-submit mt-1" :disabled="submitted">
+                  <span v-if="!submitted">Отправить</span>
+                  <span v-else class="flex items-center justify-center gap-2">
+                    <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                    Отправлено
+                  </span>
+                </button>
+              </form>
             </div>
-
-            <div>
-              <a href="mailto:info@markins.ru" class="font-body text-base text-mk-gray-600 hover:text-mk-black transition-colors block mb-4">
-                info@markins.ru
-              </a>
-              <div class="flex items-center gap-5">
-                <a href="https://t.me/markins_co" target="_blank" rel="noopener" class="font-body text-base text-mk-gray-400 hover:text-mk-black transition-colors">
-                  Telegram
-                </a>
-                <a href="https://wa.me/79898966950" target="_blank" rel="noopener" class="font-body text-base text-mk-gray-400 hover:text-mk-black transition-colors">
-                  WhatsApp
-                </a>
-              </div>
-            </div>
-
-            <!-- Invite to speak -->
-            <button
-              class="font-body text-base font-500 text-mk-rust hover:text-mk-rust-dark transition-colors duration-200 text-left self-start"
-              @click="contactOpen = true"
-            >
-              Пригласить выступить
-            </button>
-
-            <!-- Copyright + Privacy — aligned with bottom of submit button -->
-            <div class="mt-auto pt-16 flex flex-col sm:flex-row sm:items-center justify-between gap-3" style="transform: translateY(4px)">
-              <span class="font-body text-xs text-mk-gray-400">© 2026 markins. Все права защищены.</span>
-              <NuxtLink to="/privacy" class="font-body text-xs text-mk-gray-400 hover:text-mk-gray-600 transition-colors">
-                Политика конфиденциальности
-              </NuxtLink>
-            </div>
-          </div>
+          </Transition>
         </div>
-      </div>
-    </section>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup lang="ts">
-import {
-  hero,
-  cases,
-  markiz,
-  services,
-  workSteps,
-  stats,
-  founders,
-} from '~/data/site'
+const logoRef = ref<HTMLElement>()
+const wordmarkRef = ref<HTMLElement>()
+const sloganRef = ref<HTMLElement>()
+const badgeRef = ref<HTMLElement>()
+const contactsRef = ref<HTMLElement>()
+const footerRef = ref<HTMLElement>()
+const gridRef = ref<HTMLElement>()
+const particleRefs = ref<HTMLElement[]>([])
 
-// Contact modal state
-const contactOpen = ref(false)
+const showModal = ref(false)
+const submitted = ref(false)
 
-// Register with layout so header CTA opens our modal
-const registerOpenContact = inject<((cb: () => void) => void) | undefined>('registerOpenContact', undefined)
-if (registerOpenContact) {
-  registerOpenContact(() => { contactOpen.value = true })
-}
-
-// Subtitle words for tagline treatment
-const subtitleWords = ['Нейросети', 'Автоматизация', 'Разработка']
-
-// Hero star positions
-const starPositions = [
-  { top: '12%', left: '8%', size: 8 },
-  { top: '22%', left: '72%', size: 6 },
-  { top: '55%', left: '88%', size: 10 },
-  { top: '68%', left: '15%', size: 6 },
-  { top: '35%', left: '55%', size: 8 },
-  { top: '78%', left: '65%', size: 5 },
-  { top: '18%', left: '42%', size: 6 },
-  { top: '48%', left: '28%', size: 8 },
-]
-
-// ── BPMN flowchart with branching ──────────────────────
-const bpmnContainer = ref<HTMLElement>()
-const hoveredStep = ref<number | null>(null)
-const activeStep = ref<number | null>(null)
-
-
-
-// BPMN drag-to-scroll
-const isDragging = ref(false)
-const dragStartX = ref(0)
-const dragScrollLeft = ref(0)
-
-function onBpmnDragStart(e: MouseEvent) {
-  if (!bpmnContainer.value) return
-  isDragging.value = true
-  dragStartX.value = e.pageX - bpmnContainer.value.offsetLeft
-  dragScrollLeft.value = bpmnContainer.value.scrollLeft
-  bpmnContainer.value.style.cursor = 'grabbing'
-}
-function onBpmnDragMove(e: MouseEvent) {
-  if (!isDragging.value || !bpmnContainer.value) return
-  e.preventDefault()
-  const x = e.pageX - bpmnContainer.value.offsetLeft
-  const walk = (x - dragStartX.value) * 1.5
-  bpmnContainer.value.scrollLeft = dragScrollLeft.value - walk
-}
-function onBpmnDragEnd() {
-  isDragging.value = false
-  if (bpmnContainer.value) bpmnContainer.value.style.cursor = 'grab'
-}
-
-// All step descriptions for the popup (includes extra branching nodes)
-const allStepDescriptions = [
-  ...workSteps,
-  {
-    number: 'X',
-    title: 'Не можем помочь',
-    description: 'Честно говорим, что задача не в нашей компетенции, и рекомендуем специалистов',
-    shape: 'circle' as const,
-  },
-  {
-    number: 'C',
-    title: 'Корректировки',
-    description: 'Вносим правки по результатам тестирования и возвращаемся к разработке',
-    shape: 'rectangle' as const,
-  },
-]
-
-// BPMN layout
-const NODE_W = 140 // must match .bpmn-node-wrapper width in CSS
-const NODE_H_RECT = 80
-const NODE_H_CIRC = 100
-const GAP = 110
-const FIRST_X = 60
-const MAIN_Y = 240 // main row y (center of nodes)
-const BRANCH_UP_Y = 80 // "no" branches go up — enough room to not clip
-const BRANCH_DOWN_Y = 400 // loop branch goes down
-
-interface BpmnNode {
-  id: string
-  title: string
-  shape: 'circle-start' | 'circle-end' | 'rectangle' | 'diamond'
-  x: number
-  y: number
-  stepIndex: number
-}
-
-// Build node positions on main row
-// Main flow: 0-Запрос, 1-Анализ, 2-Подходит?, 3-ТЗ, 4-Согласование, 5-Разработка, 6-Тестирование, 7-Поддержка?, 8-Сопровождение, 9-Результат
-const mainNodes: BpmnNode[] = workSteps.map((step, i) => ({
-  id: `main-${i}`,
-  title: step.title,
-  shape: step.shape === 'circle'
-    ? (i === 0 ? 'circle-start' : 'circle-end')
-    : step.shape === 'diamond' ? 'diamond' : 'rectangle',
-  x: FIRST_X + i * (NODE_W + GAP),
-  y: MAIN_Y - (step.shape === 'circle' ? NODE_H_CIRC / 2 : step.shape === 'diamond' ? NODE_H_CIRC / 2 : NODE_H_RECT / 2),
-  stepIndex: i,
-}))
-
-// Extra branching nodes
-// "Не можем помочь" — above "Подходит?" (index 2), centered with it
-const podhoditCenterX = mainNodes[2].x + NODE_W / 2
-const noHelpNode: BpmnNode = {
-  id: 'no-help',
-  title: 'Не можем помочь',
-  shape: 'circle-end',
-  x: podhoditCenterX - NODE_W / 2, // position so cx() returns podhoditCenterX
-  y: BRANCH_UP_Y - NODE_H_CIRC / 2,
-  stepIndex: 10,
-}
-
-// "Корректировки" — below between Разработка(5) and Тестирование(6)
-const correctionsNode: BpmnNode = {
-  id: 'corrections',
-  title: 'Корректировки',
-  shape: 'rectangle',
-  x: (mainNodes[5].x + mainNodes[6].x) / 2,
-  y: BRANCH_DOWN_Y - NODE_H_RECT / 2,
-  stepIndex: 11,
-}
-
-// "End no support" — below Поддержка?(7), centered with it
-const podderzhkaCenterX = mainNodes[7].x + NODE_W / 2
-const endNoSupportNode: BpmnNode = {
-  id: 'end-no-support',
-  title: 'Завершение',
-  shape: 'circle-end',
-  x: podderzhkaCenterX - NODE_W / 2,
-  y: BRANCH_DOWN_Y - NODE_H_CIRC / 2,
-  stepIndex: 9,
-}
-
-const bpmnNodes = [...mainNodes, noHelpNode, correctionsNode, endNoSupportNode]
-
-const bpmnTrackWidth = mainNodes[mainNodes.length - 1].x + NODE_W + FIRST_X
-// Top padding = BRANCH_UP_Y - NODE_H_CIRC/2 = 80-50 = 30
-// Bottom node ends at: BRANCH_DOWN_Y + max(NODE_H_RECT, NODE_H_CIRC)/2 = 400+50 = 450
-// Need same 30px bottom = 450 + 30 = 480
-const bpmnTrackHeight = 480
-
-// Center helper
-function cx(node: BpmnNode) { return node.x + NODE_W / 2 }
-function cy(node: BpmnNode) {
-  const step = workSteps[node.stepIndex] || allStepDescriptions[node.stepIndex]
-  const h = step?.shape === 'rectangle' ? NODE_H_RECT : NODE_H_CIRC
-  return node.y + h / 2
-}
-
-// Main horizontal path (skips "Подходит?" NO → connects Подходит? YES → ТЗ as normal)
-const bpmnMainPath = computed(() => {
-  const pts = mainNodes.map(n => `${cx(n)},${MAIN_Y}`)
-  return `M ${pts.join(' L ')}`
-})
-
-// "Подходит?" NO branch — goes UP to "Не можем помочь"
-const bpmnNoBranchPath = computed(() => {
-  const from = mainNodes[2] // Подходит?
-  const to = noHelpNode
-  return `M ${cx(from)},${MAIN_Y - NODE_H_CIRC / 2} L ${cx(to)},${cy(to) + NODE_H_CIRC / 2}`
-})
-
-// Loop: Тестирование → down → Корректировки → down-left → Разработка
-const bpmnLoopPath = computed(() => {
-  const test = mainNodes[6]
-  const corr = correctionsNode
-  const dev = mainNodes[5]
-  return `M ${cx(test)},${MAIN_Y + NODE_H_RECT / 2} L ${cx(test)},${cy(corr)} L ${cx(corr)},${cy(corr)} L ${cx(dev)},${cy(corr)} L ${cx(dev)},${MAIN_Y + NODE_H_RECT / 2}`
-})
-
-// "Поддержка?" NO branch — goes down to end circle
-const bpmnSupportNoBranchPath = computed(() => {
-  const from = mainNodes[7] // Поддержка?
-  const to = endNoSupportNode
-  return `M ${cx(from)},${MAIN_Y + NODE_H_CIRC / 2} L ${cx(to)},${cy(to) - NODE_H_CIRC / 2}`
-})
-
-// Arrow points on main path between consecutive main nodes
-const mainArrows = computed(() => {
-  const arrows: string[] = []
-  for (let i = 0; i < mainNodes.length - 1; i++) {
-    const x1 = cx(mainNodes[i])
-    const x2 = cx(mainNodes[i + 1])
-    const midX = (x1 + x2) / 2
-    arrows.push(`${midX - 5},${MAIN_Y - 5} ${midX + 5},${MAIN_Y} ${midX - 5},${MAIN_Y + 5}`)
-  }
-  return arrows
-})
-
-function openStepDetail(i: number) {
-  activeStep.value = i
-}
-
-// Final form (Contact section)
-const finalForm = reactive({
+const form = reactive({
   company: '',
   name: '',
   position: '',
@@ -738,48 +182,71 @@ const finalForm = reactive({
   task: '',
   privacy: false,
 })
-const finalSubmitted = ref(false)
 
-function formatPhone(value: string): string {
-  const digits = value.replace(/\D/g, '')
-  if (!digits) return ''
-  let formatted = '+7'
-  const rest = digits.startsWith('7') ? digits.slice(1) : digits.startsWith('8') ? digits.slice(1) : digits
-  if (rest.length > 0) formatted += ' ' + rest.slice(0, 3)
-  if (rest.length > 3) formatted += ' ' + rest.slice(3, 6)
-  if (rest.length > 6) formatted += ' ' + rest.slice(6, 8)
-  if (rest.length > 8) formatted += ' ' + rest.slice(8, 10)
-  return formatted
+function handleSubmit() {
+  submitted.value = true
+  setTimeout(() => {
+    submitted.value = false
+    showModal.value = false
+    form.company = ''
+    form.name = ''
+    form.position = ''
+    form.phone = ''
+    form.task = ''
+    form.privacy = false
+  }, 2000)
 }
-
-function onFinalPhoneInput(e: Event) {
-  finalForm.phone = formatPhone((e.target as HTMLInputElement).value)
-}
-
-// Refs (no GSAP animations — everything visible immediately)
-const mainContent = ref<HTMLElement>()
 
 onMounted(() => {
   if (!import.meta.client) return
+  const { gsap } = useGsap()
 
-  // Apply typograf
-  if (mainContent.value) {
-    const { applyToElement } = useTypograf()
-    applyToElement(mainContent.value)
+  // Animate background grid
+  if (gridRef.value) {
+    gsap.to(gridRef.value, { opacity: 1, duration: 2, delay: 0.2, ease: 'power2.out' })
   }
 
-  // Stop Lenis when step popup is open
-  watch(activeStep, (val) => {
-    const lenis = useLenis().instance()
-    if (val !== null) lenis?.stop()
-    else lenis?.start()
+  // Floating particles
+  particleRefs.value.forEach((el, i) => {
+    const size = 2 + Math.random() * 4
+    const x = Math.random() * window.innerWidth
+    const y = Math.random() * window.innerHeight
+    gsap.set(el, { width: size, height: size, x, y, opacity: 0.08 + Math.random() * 0.15 })
+    gsap.to(el, {
+      y: y - 100 - Math.random() * 200,
+      x: x + (Math.random() - 0.5) * 100,
+      duration: 8 + Math.random() * 12,
+      repeat: -1, yoyo: true, ease: 'sine.inOut', delay: i * 0.8,
+    })
   })
+
+  // Main timeline
+  const tl = gsap.timeline({ defaults: { ease: 'power3.out' } })
+
+  if (logoRef.value) {
+    tl.fromTo(logoRef.value, { opacity: 0, scale: 0.5, rotation: -180 }, { opacity: 1, scale: 1, rotation: 0, duration: 1.2 })
+  }
+  if (wordmarkRef.value) {
+    tl.fromTo(wordmarkRef.value, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.8 }, '-=0.5')
+  }
+  if (sloganRef.value) {
+    tl.fromTo(sloganRef.value, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.3')
+  }
+  if (badgeRef.value) {
+    tl.fromTo(badgeRef.value, { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5 }, '-=0.2')
+  }
+  if (contactsRef.value) {
+    tl.fromTo(contactsRef.value, { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6 }, '-=0.2')
+  }
+  if (footerRef.value) {
+    tl.fromTo(footerRef.value, { opacity: 0 }, { opacity: 1, duration: 0.5 }, '-=0.3')
+  }
 })
 </script>
 
 <style scoped>
-/* ── Hero background ──────────────────────────────── */
-.hero-grid-bg {
+/* Animated grid background */
+.grid-bg {
   background-image:
     linear-gradient(rgba(213, 205, 186, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(213, 205, 186, 0.03) 1px, transparent 1px);
@@ -788,259 +255,163 @@ onMounted(() => {
   -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 100%);
 }
 
-.hero-star {
-  will-change: transform, opacity;
-  border-radius: 50%;
-  background: rgba(213,205,186,0.5);
-  filter: blur(3px);
+/* Contact buttons — base */
+.contact-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-family: 'Commissioner', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  min-width: 150px;
+  justify-content: center;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+.contact-btn:hover {
+  transform: translateY(-2px);
 }
 
-@keyframes hero-drift {
-  0%, 100% { transform: translate(0, 0); opacity: 0.3; }
-  25% { transform: translate(8px, -6px); opacity: 0.45; }
-  50% { transform: translate(-4px, 10px); opacity: 0.25; }
-  75% { transform: translate(12px, 4px); opacity: 0.4; }
+/* WhatsApp — green */
+.contact-whatsapp {
+  background: rgba(37, 211, 102, 0.1);
+  border-color: rgba(37, 211, 102, 0.2);
+  color: #25D366;
+}
+.contact-whatsapp:hover {
+  background: rgba(37, 211, 102, 0.18);
+  border-color: rgba(37, 211, 102, 0.35);
+  box-shadow: 0 8px 30px rgba(37, 211, 102, 0.1);
 }
 
-/* Each star gets unique animation duration + delay for organic feel */
-.hero-star-1 { animation: hero-drift 45s ease-in-out infinite; animation-delay: 0s; }
-.hero-star-2 { animation: hero-drift 52s ease-in-out infinite; animation-delay: 4s; }
-.hero-star-3 { animation: hero-drift 38s ease-in-out infinite; animation-delay: 8s; }
-.hero-star-4 { animation: hero-drift 60s ease-in-out infinite; animation-delay: 2s; }
-.hero-star-5 { animation: hero-drift 48s ease-in-out infinite; animation-delay: 6s; }
-.hero-star-6 { animation: hero-drift 55s ease-in-out infinite; animation-delay: 10s; }
-.hero-star-7 { animation: hero-drift 42s ease-in-out infinite; animation-delay: 3s; }
-.hero-star-8 { animation: hero-drift 50s ease-in-out infinite; animation-delay: 7s; }
-
-/* ── Bento Grid ───────────────────────────────────── */
-.bento-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
+/* Telegram — blue */
+.contact-telegram {
+  background: rgba(38, 165, 227, 0.1);
+  border-color: rgba(38, 165, 227, 0.2);
+  color: #26A5E4;
+}
+.contact-telegram:hover {
+  background: rgba(38, 165, 227, 0.18);
+  border-color: rgba(38, 165, 227, 0.35);
+  box-shadow: 0 8px 30px rgba(38, 165, 227, 0.1);
 }
 
-@media (min-width: 768px) {
-  .bento-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 28px;
-  }
-
-  .bento-featured {
-    grid-column: span 2;
-  }
-  .bento-r1-right {
-    grid-column: span 1;
-  }
-  .bento-r2-left {
-    grid-column: span 1;
-  }
-  .bento-r2-mid {
-    grid-column: span 1;
-  }
-  .bento-r2-right {
-    grid-column: span 1;
-  }
+/* MAX — violet */
+.contact-max {
+  background: rgba(119, 87, 189, 0.1);
+  border-color: rgba(119, 87, 189, 0.2);
+  color: #7757BD;
+}
+.contact-max:hover {
+  background: rgba(119, 87, 189, 0.18);
+  border-color: rgba(119, 87, 189, 0.35);
+  box-shadow: 0 8px 30px rgba(119, 87, 189, 0.1);
 }
 
-/* Make cards fill their grid cells */
-.bento-grid > div {
-  display: flex;
+/* Phone — beige */
+.contact-phone {
+  background: rgba(213, 205, 186, 0.06);
+  border-color: rgba(213, 205, 186, 0.12);
+  color: #D5CDBA;
 }
-.bento-grid > div > * {
-  width: 100%;
-}
-
-/* ── Markiz avatar (gradient orb) ─────────────────── */
-.markiz-avatar {
-  width: 72px;
-  height: 72px;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 45%, #FFA041 0%, #F76A3A 25%, #C73D5A 55%, #5B2A6F 80%, transparent 100%);
-  filter: blur(0.5px);
-  box-shadow:
-    0 0 20px rgba(247, 106, 58, 0.3),
-    0 0 40px rgba(199, 61, 90, 0.2);
-  animation: markiz-pulse 6s ease-in-out infinite;
-}
-@keyframes markiz-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.04); }
+.contact-phone:hover {
+  background: rgba(213, 205, 186, 0.12);
+  border-color: rgba(213, 205, 186, 0.25);
+  box-shadow: 0 8px 30px rgba(213, 205, 186, 0.06);
 }
 
-/* ── CTA fill button (hover slide-up fill) ───────── */
-.cta-fill-btn {
-  border: 1px solid rgba(245, 240, 235, 0.5);
-  background: transparent;
-  color: #F5F0EB;
+/* Request — rust accent */
+.contact-request {
+  background: rgba(188, 106, 86, 0.12);
+  border-color: rgba(188, 106, 86, 0.25);
+  color: #BC6A56;
 }
-.cta-fill-btn::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: #F5F0EB;
-  transform: translateY(100%);
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 0;
-}
-.cta-fill-btn:hover {
-  color: #101010;
-}
-.cta-fill-btn:hover::before {
-  transform: translateY(0);
+.contact-request:hover {
+  background: rgba(188, 106, 86, 0.2);
+  border-color: rgba(188, 106, 86, 0.4);
+  box-shadow: 0 8px 30px rgba(188, 106, 86, 0.12);
 }
 
-/* ── Swipe hand animation ────────────────────────── */
-.swipe-hand {
-  animation: swipe-hint 2.5s ease-in-out infinite;
-}
-@keyframes swipe-hint {
-  0%, 100% { transform: translateX(0); }
-  50% { transform: translateX(-12px); }
-}
-
-/* ── BPMN Horizontal Flowchart ────────────────────── */
-.bpmn-scroll-container {
-  overflow-x: auto;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-  padding: 0;
-  cursor: grab;
-  user-select: none;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-}
-.bpmn-scroll-container::-webkit-scrollbar {
-  display: none;
-}
-
-.bpmn-track {
+/* Modal card */
+.modal-card {
   position: relative;
-  min-width: v-bind("bpmnTrackWidth + 'px'");
-  height: v-bind("bpmnTrackHeight + 'px'");
-}
-
-.bpmn-line-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 0;
+  max-width: 440px;
+  background: #131316;
+  border: 1px solid rgba(213, 205, 186, 0.1);
+  border-radius: 16px;
+  padding: 32px;
+  max-height: 90vh;
+  overflow-y: auto;
 }
 
-/* Nodes above lines */
-.bpmn-node-wrapper {
-  z-index: 1;
+/* Form inputs */
+.form-input {
+  width: 100%;
+  height: 48px;
+  padding: 0 18px;
+  background: rgba(213, 205, 186, 0.05);
+  border: 1px solid rgba(213, 205, 186, 0.12);
+  border-radius: 10px;
+  font-family: 'Commissioner', sans-serif;
+  font-size: 14px;
+  color: #ECEBE4;
+  transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
+}
+.form-input::placeholder {
+  color: rgba(213, 205, 186, 0.3);
+}
+.form-input:focus {
+  border-color: rgba(213, 205, 186, 0.35);
+  background: rgba(213, 205, 186, 0.08);
+  box-shadow: 0 0 0 3px rgba(213, 205, 186, 0.06);
+}
+.form-textarea {
+  height: auto;
+  min-height: 80px;
+  padding: 14px 18px;
+  resize: vertical;
+  line-height: 1.5;
 }
 
-/* Animated dashed line */
-.bpmn-animated-path {
-  animation: dash-flow 1.5s linear infinite;
-}
-@keyframes dash-flow {
-  to {
-    stroke-dashoffset: -28;
-  }
-}
-
-/* Node wrapper */
-.bpmn-node-wrapper {
-  position: absolute;
-  width: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  scroll-snap-align: center;
-}
-
-/* ── Shape styles ── */
-.bpmn-shape {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  border: 2px solid #D4CFC9;
-}
-
-.bpmn-circle {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-}
-
-/* BPMN standard colors */
-.bpmn-start {
-  background: #E8E3DE;
-  border-color: #91BD57;
-}
-.bpmn-end {
-  background: #E8E3DE;
-  border-color: #BC6A56;
-}
-
-.bpmn-rect {
-  width: 130px;
-  height: 80px;
-  border-radius: 0;
-  background: #E8E3DE;
-  border-color: rgba(46, 134, 222, 0.4);
-}
-
-.bpmn-diamond {
-  width: 100px;
-  height: 100px;
-  transform: rotate(45deg);
-  border-radius: 0;
-  background: #E8E3DE;
-  border-color: rgba(243, 156, 18, 0.4);
-}
-.bpmn-diamond .bpmn-shape-label {
-  transform: rotate(-45deg);
-}
-
-.bpmn-shape-label {
-  font-family: 'Space Grotesk', system-ui, sans-serif;
+/* Submit button */
+.form-submit {
+  width: 100%;
+  height: 48px;
+  background: #D5CDBA;
+  color: #09090B;
+  border: none;
+  border-radius: 10px;
+  font-family: 'Unbounded', sans-serif;
   font-size: 13px;
   font-weight: 600;
-  color: #1A1A1A;
-  line-height: 1.2;
-  padding: 4px;
-  max-width: 110px;
+  letter-spacing: 0.04em;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.form-submit:hover:not(:disabled) {
+  background: #E5D4AD;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 24px rgba(213, 205, 186, 0.15);
+}
+.form-submit:disabled {
+  background: rgba(145, 189, 87, 0.9);
+  color: white;
+  cursor: default;
 }
 
-/* Hover — single darker border, no double border */
-.bpmn-hover {
-  border-color: #1A1A1A !important;
-}
+/* Transitions */
+.backdrop-enter-active { transition: opacity 0.3s ease; }
+.backdrop-leave-active { transition: opacity 0.2s ease; }
+.backdrop-enter-from, .backdrop-leave-to { opacity: 0; }
 
-/* ── Step popup transition ──────────────────────── */
-.step-popup-enter-active,
-.step-popup-leave-active {
-  transition: all 0.25s ease;
-}
-.step-popup-enter-from,
-.step-popup-leave-to {
-  opacity: 0;
-}
+.popup-enter-active { transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease; }
+.popup-leave-active { transition: transform 0.2s ease, opacity 0.2s ease; }
+.popup-enter-from { opacity: 0; transform: scale(0.95) translateY(10px); }
+.popup-leave-to { opacity: 0; transform: scale(0.97); }
 
-/* ── Contact Input ────────────────────────────────── */
-.contact-input {
-  width: 100%;
-  background: #EDE8E3;
-  border: 1px solid #E5E0DB;
-  border-radius: 0;
-  padding: 14px 16px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 16px;
-  color: #1A1A1A;
-  transition: border-color 0.2s;
-}
-.contact-input::placeholder {
-  color: #A3A3A2;
-}
-.contact-input:focus {
-  border-color: #BC6A56;
-}
+/* Particle */
+.particle { will-change: transform; }
 </style>
