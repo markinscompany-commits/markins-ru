@@ -388,7 +388,43 @@
       </div>
     </section>
 
-    <!-- ===== BLOCK 8: Contact Form + Footer (beige bg) ===== -->
+    <!-- ===== BLOCK 8: Partners (beige bg) ===== -->
+    <section class="py-20 md:py-28 bg-mk-bg">
+      <div class="container">
+        <h2 class="font-display text-3xl sm:text-4xl md:text-5xl font-600 text-mk-black mb-14 md:mb-20">
+          Партнёры
+        </h2>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-8 md:gap-12 items-center">
+          <!-- Битрикс24 -->
+          <div class="flex items-center justify-center h-16">
+            <span class="font-display text-lg md:text-xl font-600 text-mk-gray-400">Битрикс24</span>
+          </div>
+          <!-- amoCRM -->
+          <div class="flex items-center justify-center h-16">
+            <span class="font-display text-lg md:text-xl font-600 text-mk-gray-400">amoCRM</span>
+          </div>
+          <!-- Wazzup24 -->
+          <div class="flex items-center justify-center h-16">
+            <span class="font-display text-lg md:text-xl font-600 text-mk-gray-400">Wazzup24</span>
+          </div>
+          <!-- Rocket Sales -->
+          <div class="flex items-center justify-center h-16">
+            <span class="font-display text-lg md:text-xl font-600 text-mk-gray-400">Rocket Sales</span>
+          </div>
+          <!-- onlinePBX -->
+          <div class="flex items-center justify-center h-16">
+            <span class="font-display text-lg md:text-xl font-600 text-mk-gray-400">onlinePBX</span>
+          </div>
+        </div>
+
+        <p class="font-body text-sm text-mk-gray-400 mt-10 max-w-2xl">
+          Мы являемся официальными партнёрами и интеграторами ведущих IT-платформ. Внедряем, настраиваем и сопровождаем.
+        </p>
+      </div>
+    </section>
+
+    <!-- ===== BLOCK 9: Contact Form + Footer (beige bg) ===== -->
     <section id="contacts" class="py-24 md:py-32 bg-mk-bg">
       <div class="container">
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 md:gap-20">
