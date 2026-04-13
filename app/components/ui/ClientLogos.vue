@@ -10,7 +10,7 @@
           <img
             :src="logo.src"
             :alt="logo.name"
-            class="h-7 md:h-8 w-auto max-w-[120px] object-contain logo-bw"
+            class="h-9 md:h-10 w-auto max-w-[140px] object-contain logo-bw"
             loading="lazy"
           />
           <span
